@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+declare GIT_REPO_PARENT_DIR=${HOME}/workspace/git/github.com/drgeb
+declare GIT_REPO_DIR=${GIT_REPO_PARENT_DIR}/mac-dev-playbook
+declare REPO_URL=https://github.com/drgeb/mac-dev-playbook.git
+
 # Bash "strict" mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -38,7 +42,7 @@ brew tap yschimke/tap
 # Install sqllite
 if [[ ! -d "/usr/local/Cellar/sqlite" ]]; then
     echo "Installing sqlite"
-    brew install sqlite --with-function --with-secure-delete
+    brew install sqlite
 fi
 
 # Install Tcl/Tk
@@ -71,3 +75,35 @@ if [[ ! -x "/usr/local/bin/ansible" ]]; then
     echo "Installing ansible"
     /usr/local/bin/pip3 install ansible kerberos pywinrm
 fi
+
+
+if [ ! -d ${GIT_REPO_PARENT_DIR} ]; then
+    mkdir -pv ${GIT_REPO_PARENT_DIR}
+fi
+
+if [ -f ~/.ssh/known_hosts ]; then
+  IS_HOST_DEFINED=`grep bitbucket.org ~/.ssh/known_hosts`
+  if [ "${IS_HOST_DEFINED}" != "" ]; then
+    ssh-keyscan -H bitbucket.org >> ~/.ssh/known_hosts
+  fi
+
+  IS_HOST_DEFINED=`grep github.com ~/.ssh/known_hosts`
+  if [ "${IS_HOST_DEFINED}" != "" ]; then
+    ssh-keyscan -H githuub.com >> ~/.ssh/known_hosts
+  fi
+fi
+
+if [ ! -d ${GIT_REPO_DIR} ]; then
+        echo Installing requirements
+        cd ${GIT_REPO_DIR} || exit
+        git clone ${REPO_URL} system_config
+        cd system_config || exit
+        ansible-galaxy role install -r requirements.yml
+        ansible-galaxy collection install -r requirements.yml
+fi
+
+if [ ! -d ${HOME}/logs ]; then
+    mkdir ${HOME}/logs
+fi
+
+#ansible-pull -U ${REPO_URL} -i wsl --vault-password-file ~/.ssh/.ansible_vault_system_configs | tee ${HOME}/logs/bootstrap.log
