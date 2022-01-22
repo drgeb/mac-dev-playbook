@@ -24,7 +24,21 @@
     - role: geerlingguy.mac.dock
       when: configure_dock
       tags: ['dock']
-
+    - role: kb9zzw.garage.vscode
+      when: configure_vscode
+      tags: ['vscode']
+    - role: kb9zzw.garage.vagrant
+      when: configure_vagrant
+      tags: ['vagrant']
+    - role: kb9zzw.garage.asdf
+      when: configure_asdf
+      tags: ['asdf']
+    - role: kb9zzw.garage.docker
+      when: configure_docker
+      tags: ['docker']
+    - role: fernandrone.intellij
+      when: configure_intellij
+      tags: ['intellij']
   tasks:
     - import_tasks: tasks/sudoers.yml
       when: configure_sudoers
