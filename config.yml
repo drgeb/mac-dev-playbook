@@ -1,0 +1,129 @@
+---
+downloads: ~/.ansible-downloads/
+
+configure_dotfiles: false
+configure_terminal: false
+configure_osx: false
+configure_vscode: true
+configure_vagrant: true
+configure_asdf: true
+configure_docker: true
+configure_intellij: true
+
+# Set to 'true' to configure the Dock via dockutil.
+configure_dock: false
+dockitems_remove: []
+dockitems_persist: []
+
+configure_sudoers: false
+sudoers_custom_config: ''
+
+homebrew_installed_packages:
+  - curl
+  - dos2unix
+  - git
+  - the_silver_searcher
+  - zsh
+  - zsh-completions
+  - zsh-syntax-highlighting
+  - zsh-history-substring-search
+  - zstd
+homebrew_taps:
+  - homebrew/core
+  - homebrew/cask
+  - homebrew/cask-fonts #Used by iosevka fonts
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+  - beyond-compare
+  - chromedriver
+  - font-alegreya
+  - font-hack-nerd-font
+  - font-iosevka
+  - font-iosevka-slab
+#  - google-chrome
+  - iterm2
+  - vnc-viewer
+
+# See `geerlingguy.mas` role documentation for usage instructions.
+mas_installed_apps: []
+mas_email: ""
+mas_password: ""
+
+osx_script: "~/.osx --no-restart"
+
+# Install packages from other package managers.
+# Note: You are responsible for making sure the required package managers are
+# installed, eg. through homebrew.
+composer_packages: []
+gem_packages: []
+npm_packages: []
+pip_packages: []
+
+# Set to 'true' to configure Sublime Text.
+configure_sublime: false
+
+# Glob pattern to ansible task files to run after all other tasks are finished.
+post_provision_tasks: []
+
+# List of Homebrew packages to install
+asdf_packages: []
+
+# IntelliJ
+# IntelliJ IDEA version number
+intellij_version: '2021.3.1'
+
+# Mirror where to dowload IntelliJ IDEA redistributable package from
+# Using HTTP because of https://github.com/ansible/ansible/issues/11579
+intellij_mirror: 'http://download.jetbrains.com/idea'
+
+# Edition to install (community or ultimate)
+intellij_edition: community
+
+# Set to 'false' so it skips the installation of Intellij IDEA in case it is
+# already installed (even if a different version than requested)
+intellij_force: true
+
+# Base installation directory for any IntelliJ IDEA distribution
+intellij_install_dir: /opt/idea/idea-{{ intellij_edition }}-{{ intellij_version }}
+
+# Location of the default Apache Maven installation for IntelliJ IDEA projects
+# Defaults to value of ansible_local.maven.general.home (see gantsign.maven role)
+intellij_default_maven_home: '{{ ((((ansible_local | default(dict())).maven | default(dict())).general | default(dict())).home | default(None)) }}'
+
+# URL for IntelliJ IDEA plugin manager web service
+intellij_plugin_manager_url: 'https://plugins.jetbrains.com/pluginManager/'
+
+# List of users to configure IntelliJ IDEA for
+users:
+  - username: 'gerry.bennett' # Unix user name
+    intellij_group: 'staff'   # Unix group for the user's files/directories (optional - defaults to username)
+    intellij_jdks:
+      - name: 'corretto-11.0.14.9.1' # The name use want to use for this JDK
+        home: '.asdf/installs/java/corretto-11.0.14.9.1' 
+        # The path to the JDK home.
+    # The name of the JDK you want to be the default for new projects.
+    # Required if you specify `intellij_jdks`.
+    # Must match the name given to one of the `intellij_jdks`.
+    intellij_default_jdk: 'corretto-11.0.14.9.1'
+    intellij_disabled_plugins: # see ~/.*Idea*/config/disabled_plugins.txt
+      - # Plugin ID
+    intellij_codestyles:
+      - name: # Name (must match the value in the XML file /code_scheme/@name)
+        url: # URL to download the codestyles XML from
+    intellij_default_codestyle: # Name (must match the value in the XML file /code_scheme/@name)
+    intellij_inspection_profiles:
+      - name: # Name (must match the value in the XML file /profile/option[@name='myName']/@value)
+        url: # URL to download the inspection profile XML from
+    intellij_default_inspection_profile: # Name (must match the value in the XML file /profile/option[@name='myName']/@value)
+    intellij_plugins:
+      - # Plugin ID of plugin to install
+    # Ultimate Edition only: location of the IntelliJ license key on the Ansible master.
+    # Your license key can be found at ~/.IntelliJIdea2017.1/config/idea.key
+    intellij_license_key_path: # e.g. '/vagrant/idea.key'
+
+# Directory to store files downloaded for IntelliJ IDEA installation
+intellij_download_dir: "{{ x_ansible_download_dir | default(ansible_env.HOME + '/.ansible/tmp/downloads') }}"
+
+# Timeout for IntelliJ IDEA download response in seconds
+intellij_idea_download_timeout_seconds: 600
