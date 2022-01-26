@@ -30,7 +30,7 @@
     - role: kb9zzw.garage.vagrant
       when: configure_vagrant
       tags: ['vagrant']
-    - role: kb9zzw.garage.asdf
+    - role: markosamuli.asdf
       when: configure_asdf
       tags: ['asdf']
     - role: kb9zzw.garage.docker
