@@ -1,0 +1,51 @@
+---
+- name: software | python3 | install package
+  become: true
+  tags: ulauncher
+  apt:
+    name: python3
+    state: present
+  when:
+    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
+    - python3 is defined
+    - python3
+
+- name: software | python3-pip | install package
+  become: true
+  tags: ulauncher
+  apt:
+    name: python3-pip
+    state: present
+  when:
+    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
+    - python3 is defined
+    - python3
+
+- name: 'software | pipenv | install binary'
+  become: true
+  import_role:
+    name: gantsign.pipenv
+  vars:
+    pipenv_users: '{{ dev_user }}'
+  when:
+    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
+    - pipenv is defined
+    - pipenv
+
+- name: 'software | git | ensure we clone myclone project'
+  ansible.builtin.git:
+    repo: git@bitbucket.org:drgeb/myclone.git
+    dest: sandbox/git/bitbucket.org/drgeb/
+    version: master
+
+- name: 'software | xvfb | ensure xvfb exists, service is up'
+  import_role:
+    name: 'infOpen.xvfb'
+
+- name: 'software | xclip | ensure xclip is installed'
+  package:
+    name:
+      - xclip
+    state: present
+  become: true
+  when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
