@@ -1,0 +1,5 @@
+- name: software | gpg | ensure gpg is available
+  import_role:
+    name: andrewrothstein.gpg
+  when:
+    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
