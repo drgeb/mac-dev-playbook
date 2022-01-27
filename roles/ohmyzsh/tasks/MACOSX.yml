@@ -1,0 +1,65 @@
+---
+
+- name: 'software | ohmyzsh | install binary'
+  become: true
+  import_role:
+    name: gantsign.oh-my-zsh
+  when:
+    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
+    - ohmyzsh is defined
+    - ohmyzsh
+
+- name: 'software | znap | install znap'
+  tags:
+    # Suppress warning: [ANSIBLE0006] git used in place of git module
+    # Git module doesn't allow us to set `core.autocrlf=input`.
+    - skip_ansible_lint
+  become: yes
+  become_user: '{{ user.username }}'
+  # core.autocrlf=input prevents https://github.com/robbyrussell/oh-my-zsh/issues/4402
+  command: 'git clone -c core.autocrlf=input --depth=1 https://github.com/marlonrichert/zsh-snap.git .zsh-snap'
+  args:
+    chdir: '~{{ user.username }}'
+    creates: '~{{ user.username }}/.zsh-snap'
+  with_items: "{{ users }}"
+  when: "((user.oh_my_zsh | default({})).install | default(oh_my_zsh_install)) | bool"
+  loop_control:
+    loop_var: user
+    label: '{{ user.username }}'
+
+- name: 'software | antigen | install binary'
+  become: true
+  import_role:
+    name: gantsign.antigen
+  when:
+    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
+    - ohmyzsh is defined
+    - ohmyzsh
+    - antigen is defined
+    - antigen
+
+- name: 'software | antigen_bundles | install binary'
+  become: true
+  import_role:
+    name: gantsign.antigen_bundles
+  when:
+    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
+    - ohmyzsh is defined
+    - ohmyzsh
+    - antigen is defined
+    - antigen
+
+- name: 'software | ohmyzsh | install tool dependencies'
+  become: true
+  ansible.builtin.package:
+    name: '{{ item.name }}'
+    state: present
+  with_items: '{{ zsh_3rdparty_package_dependencies }}'
+  when:
+    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
+
+- name: 'software | ohmyzsh | install autoenv git based dependencies'
+  become_user: '{{ dev_user }}'
+  ansible.builtin.git:
+    repo: 'git://github.com/inishchith/autoenv.git'
+    dest: '/home/{{ dev_user }}/.autoenv'
