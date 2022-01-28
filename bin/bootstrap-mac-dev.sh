@@ -98,8 +98,8 @@ if [ ! -d ${GIT_REPO_DIR} ]; then
         cd ${GIT_REPO_DIR} || exit
         git clone ${REPO_URL} system_config
         cd system_config || exit
-        ansible-galaxy role install -r requirements.yml
-        ansible-galaxy collection install -r requirements.yml
+        ansible-galaxy role install -r roles/requirements.yml
+        ansible-galaxy collection install -r roles/requirements.yml
 fi
 
 if [ ! -d ${HOME}/logs ]; then

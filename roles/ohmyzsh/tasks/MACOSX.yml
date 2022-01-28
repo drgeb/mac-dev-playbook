@@ -59,7 +59,6 @@
     - ansible_distribution in ["Pop!_OS", "Ubuntu"]
 
 - name: 'software | ohmyzsh | install autoenv git based dependencies'
-  become_user: '{{ dev_user }}'
   ansible.builtin.git:
     repo: 'git://github.com/inishchith/autoenv.git'
-    dest: '/home/{{ dev_user }}/.autoenv'
+    dest: '{{ ansible_env.HOME }}/.autoenv'

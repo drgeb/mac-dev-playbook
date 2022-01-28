@@ -1,9 +1,12 @@
 ---
-downloads: ~/.ansible-downloads/
+downloads: '~/.ansible-downloads/'
 
 configure_dotfiles: true
 configure_terminal: true
 configure_osx: true
+configure_myclone: true
+configure_dotfilemanagement: false
+configure_ohmyzsh: true
 
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: false

@@ -17,6 +17,7 @@ dockitems_persist: []
 
 configure_sudoers: false
 sudoers_custom_config: ''
+git_project_workspace_dir: 'workspace/git/izeay'
 
 homebrew_installed_packages:
   - curl

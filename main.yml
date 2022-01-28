@@ -12,6 +12,17 @@
       tags: ['always']
 
   roles:
+    - role: myclone
+      when: configure_myclone    
+      tags: ['myclone']
+    - role: config_dotfilemanagement
+      when: configure_dotfilemanagement
+      tags: ['config_dotfilemanagement']
+    - role: ohmyzsh
+      when: configure_ohmyzsh    
+      tags: ['ohmyzsh']
+    - role: gpg
+      tags: ['gpg']
     - role: elliotweiser.osx-command-line-tools
     - role: geerlingguy.mac.homebrew
       tags: ['homebrew']
@@ -24,7 +35,7 @@
     - role: geerlingguy.mac.dock
       when: configure_dock
       tags: ['dock']
-    - role: kb9zzw.garage.vscode
+    - role: kb9zzw.garage.vscode 
       when: configure_vscode
       tags: ['vscode']
     - role: kb9zzw.garage.vagrant

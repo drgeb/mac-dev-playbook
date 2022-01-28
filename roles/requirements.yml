@@ -3,7 +3,9 @@ roles:
   - name: elliotweiser.osx-command-line-tools
   - name: geerlingguy.dotfiles
   - name: fernandrone.intellij
-
+  - name: gantsign.oh-my-zsh
+  - name: gantsign.antigen
+  - name: gantsign.antigen_bundles
 collections:
   - name: geerlingguy.mac
   - name: kb9zzw.garage
