@@ -1,0 +1,35 @@
+---
+- name: ensure asdf depencies are installed.
+  become: false
+  homebrew:
+    name: "{{ ohmyzsh_asdf_packages }}"
+    state: present
+
+- name: ensure asdf is install
+  become: false
+  git:
+    clone: true
+    repo: "{{ asdf_repo_url }}"
+    dest: "{{ asdf_install_dir }}"
+    version: master
+
+- name: ensure ohmyzsh asdf plugin dependencies are installed.
+  become: false
+  ansible.builtin.shell:
+    cmd: >
+      . {{ asdf_install_dir }}/asdf.sh && asdf plugin add {{ item.name }}
+  args:
+    creates: "{{ asdf_install_dir }}/plugins/{{ item.name }}"
+  with_items:
+    - "{{ ohmyzsh_asdf_plugins_dependencies }}"
+
+- name: ensure ohmyzsh asdf dependencies are installed and configured.
+  become: false
+  ansible.builtin.shell:
+    cmd: >
+      . {{ asdf_install_dir }}/asdf.sh && asdf install {{ item.name }} {{ item.version }}
+  args:
+    #TODO creates is wrong
+    creates: "{{ asdf_install_dir }}/plugins/{{ item.name }}"
+  with_items:
+    - "{{ ohmyzsh_asdf_plugins_dependencies }}"

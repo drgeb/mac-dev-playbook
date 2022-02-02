@@ -12,12 +12,6 @@
       tags: ['always']
 
   roles:
-    - role: drgeb.tilt
-      when: configure_tilt   
-      tags: ['tilt']  
-    - role: myclone
-      when: configure_myclone    
-      tags: ['myclone']
     - role: tkimball83.iterm2
       iterm2_defaults:
         - name: PrefsCustomFolder
@@ -34,14 +28,6 @@
         #   value: false
       when: configure_iterm2
       tags: ['config_iterm2']
-    - role: config_dotfilemanagement
-      when: configure_dotfilemanagement
-      tags: ['config_dotfilemanagement']
-    - role: ohmyzsh
-      when: configure_ohmyzsh    
-      tags: ['ohmyzsh']
-    - role: gpg
-      tags: ['gpg']
     - role: elliotweiser.osx-command-line-tools
     - role: geerlingguy.mac.homebrew
       tags: ['homebrew']
@@ -69,6 +55,21 @@
     - role: fernandrone.intellij
       when: configure_intellij
       tags: ['intellij']
+    - role: drgeb.tilt
+      when: configure_tilt   
+      tags: ['tilt']
+    - role: drgeb.myclone
+      when: configure_myclone    
+      tags: ['myclone']
+    - role: drgeb.config_dotfilemanagement
+      when: configure_dotfilemanagement
+      tags: ['config_dotfilemanagement']
+    - role: drgeb.ohmyzsh
+      when: configure_ohmyzsh    
+      tags: ['ohmyzsh']
+    - role: drgeb.gpg
+      tags: ['gpg']
+
   tasks:
     - import_tasks: tasks/sudoers.yml
       when: configure_sudoers
@@ -88,6 +89,7 @@
     - import_tasks: tasks/sublime-text.yml
       when: configure_sublime
       tags: ['sublime-text']
+
 
     - name: Run configured post-provision ansible task files.
       include_tasks: "{{ outer_item }}"

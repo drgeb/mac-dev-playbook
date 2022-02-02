@@ -19,7 +19,8 @@ dockitems_persist: []
 
 configure_sudoers: false
 sudoers_custom_config: ''
-git_project_workspace_dir: 'workspace/git/izeay'
+workspace: '{{ ansible_env.HOME }}/workspace'
+git_project_workspace_dir: '{{ workspace }}/git/izeay'
 git_cfg_repo: 'git@izeay:drgeb/cfg.git'
 git_myclone_repo: 'git@izeay:drgeb/myclone.git'
 dev_home: 'Users'
