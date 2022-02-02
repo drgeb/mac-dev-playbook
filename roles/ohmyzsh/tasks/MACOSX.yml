@@ -1,13 +1,25 @@
 ---
+- name: ensure asdf and ruby is installed via asdf, because we need colorls
+  include_tasks: 'asdf.yml'
+
+- name: ensure colorls from ruby is installed.
+  gem:
+    name: "{{ item.name | default(item) }}"
+    state: "{{ item.state | default('present') }}"
+    version: "{{ item.version | default(omit) }}"
+    user_install: false
+    executable: "{{ item.executable | default(omit) }}"
+  loop: "{{ ohmyzsh_gem_packages }}"
+
+- name: ensure nerdfonts are installed
+  become: false
+  import_role:
+    name: drew-kun.nerdfonts
 
 - name: 'software | ohmyzsh | install binary'
-  become: true
+  become: false
   import_role:
-    name: gantsign.oh-my-zsh
-  when:
-    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
-    - ohmyzsh is defined
-    - ohmyzsh
+    name: viasite-ansible.zsh
 
 - name: 'software | znap | install znap'
   tags:
@@ -26,37 +38,6 @@
   loop_control:
     loop_var: user
     label: '{{ user.username }}'
-
-- name: 'software | antigen | install binary'
-  become: true
-  import_role:
-    name: gantsign.antigen
-  when:
-    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
-    - ohmyzsh is defined
-    - ohmyzsh
-    - antigen is defined
-    - antigen
-
-- name: 'software | antigen_bundles | install binary'
-  become: true
-  import_role:
-    name: gantsign.antigen_bundles
-  when:
-    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
-    - ohmyzsh is defined
-    - ohmyzsh
-    - antigen is defined
-    - antigen
-
-- name: 'software | ohmyzsh | install tool dependencies'
-  become: true
-  ansible.builtin.package:
-    name: '{{ item.name }}'
-    state: present
-  with_items: '{{ zsh_3rdparty_package_dependencies }}'
-  when:
-    - ansible_distribution in ["Pop!_OS", "Ubuntu"]
 
 - name: 'software | ohmyzsh | install autoenv git based dependencies'
   ansible.builtin.git:

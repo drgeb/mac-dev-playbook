@@ -4,11 +4,13 @@ downloads: ~/.ansible-downloads/
 configure_dotfiles: false
 configure_terminal: false
 configure_osx: false
-configure_vscode: true
-configure_vagrant: true
-configure_asdf: true
-configure_docker: true
-configure_intellij: true
+configure_vscode: false
+configure_vagrant: false
+configure_asdf: false
+configure_docker: false
+configure_intellij: false
+configure_iterm2: false
+configure_tilt: true
 
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: false
@@ -18,6 +20,10 @@ dockitems_persist: []
 configure_sudoers: false
 sudoers_custom_config: ''
 git_project_workspace_dir: 'workspace/git/izeay'
+git_cfg_repo: 'git@izeay:drgeb/cfg.git'
+git_myclone_repo: 'git@izeay:drgeb/myclone.git'
+dev_home: 'Users'
+dev_user: 'gerry.bennett'
 
 homebrew_installed_packages:
   - curl
@@ -30,10 +36,14 @@ homebrew_installed_packages:
   - zsh-syntax-highlighting
   - zsh-history-substring-search
   - zstd
+  - tree
+  - packer
+  - gnu-tar
 homebrew_taps:
   - homebrew/core
   - homebrew/cask
   - homebrew/cask-fonts #Used by iosevka fonts
+  - buildpacks/tap/pack
 
 homebrew_cask_appdir: /Applications
 homebrew_cask_apps:
@@ -619,3 +629,8 @@ intellij_download_dir: "{{ x_ansible_download_dir | default(ansible_env.HOME + '
 
 # Timeout for IntelliJ IDEA download response in seconds
 intellij_idea_download_timeout_seconds: 600
+
+zsh_user: gerry.bennett
+zsh_antigen_bundles_extras:
+  - joel-porquet/zsh-dircolors-solarized
+zsh_autosuggestions_bind_key: "^U"

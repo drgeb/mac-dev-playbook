@@ -1,3 +1,19 @@
 ---
 # defaults file for ohmyzsh
 platform: ''
+brew_packages: romkatv/powerlevel10k/powerlevel10k
+
+# asdf source repository
+asdf_repo_url: "https://github.com/asdf-vm/asdf.git"
+
+# where to install asdf
+asdf_install_dir: "{{ ansible_env.HOME }}/.asdf"
+
+# asdf plugins to install
+ohmyzsh_asdf_plugins_dependencies:
+    - name: 'ruby'
+      version: 'latest'
+
+ohmyzsh_asdf_packages: ['gnu-tar']
+
+ohmyzsh_gem_packages: ['colorls']

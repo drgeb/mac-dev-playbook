@@ -6,6 +6,9 @@ roles:
   - name: gantsign.oh-my-zsh
   - name: gantsign.antigen
   - name: gantsign.antigen_bundles
+  - name: viasite-ansible.zsh
+  - name: drew-kun.nerdfonts
+  - name: tkimball83.iterm2
 collections:
   - name: geerlingguy.mac
   - name: kb9zzw.garage

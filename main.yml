@@ -12,9 +12,28 @@
       tags: ['always']
 
   roles:
+    - role: drgeb.tilt
+      when: configure_tilt   
+      tags: ['tilt']  
     - role: myclone
       when: configure_myclone    
       tags: ['myclone']
+    - role: tkimball83.iterm2
+      iterm2_defaults:
+        - name: PrefsCustomFolder
+          type: string
+          value: 
+        - name: LoadPrefsFromCustomFolder
+          type: bool
+          value: true
+        # - name: OnlyWhenMoreTabs
+        #   type: string
+        #   value: 0
+        # - name: PromptOnQuit
+        #   type: bool
+        #   value: false
+      when: configure_iterm2
+      tags: ['config_iterm2']
     - role: config_dotfilemanagement
       when: configure_dotfilemanagement
       tags: ['config_dotfilemanagement']
