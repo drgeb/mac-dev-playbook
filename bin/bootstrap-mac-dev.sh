@@ -3,6 +3,37 @@
 declare GIT_REPO_PARENT_DIR=${HOME}/workspace/git/github.com/drgeb
 declare GIT_REPO_DIR=${GIT_REPO_PARENT_DIR}/mac-dev-playbook
 declare REPO_URL=https://github.com/drgeb/mac-dev-playbook.git
+declare BREW_CMD="brew"
+declare SQLITE_CMD="sqlite"
+declare ANSIBLE_CMD="ansible"
+declare PIP_CMD="pip3" 
+
+################################################################################
+
+# Attempt to set APP_HOME
+# Resolve links: $0 may be a link
+PRG="$0"
+# Need this for relative symlinks.
+while [ -h "$PRG" ] ; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '/.*' > /dev/null; then
+        PRG="$link"
+    else
+        PRG=`dirname "$PRG"`"/$link"
+    fi
+done
+SAVED="`pwd`"
+cd "`dirname \"$PRG\"`/.." >/dev/null
+APP_HOME="`pwd -P`"
+cd "$SAVED" >/dev/null
+
+APP_NAME="mac-dev-playbook"
+APP_BASE_NAME=`basename "$0"`
+
+#echo APP_BASE_NAME=${APP_BASE_NAME}
+#echo APP_HOME =${APP_HOME}
+################################################################################
 
 # Bash "strict" mode
 set -euo pipefail
@@ -20,9 +51,10 @@ if [[ "$RETVAL" -ne "0" ]]; then
 fi
 
 # Install brew
-if [[ ! -x "/usr/local/bin/brew" ]]; then
+if [[ ! -x "${BREW_CMD}" ]]; then
     echo "Installing brew"
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    eval "$(${BREW_CMD} shellenv)"
 fi
 
 # This homebrew/dupes is deprecated
@@ -40,7 +72,7 @@ brew tap webhookrelay/tap
 brew tap yschimke/tap
 
 # Install sqllite
-if [[ ! -d "/usr/local/Cellar/sqlite" ]]; then
+if [[ ! -d "${SQLITE_CMD}" ]]; then
     echo "Installing sqlite"
     brew install sqlite
 fi
@@ -61,19 +93,17 @@ fi
 if [[ ! -d "/usr/local/Cellar/python@3.9" ]]; then
     echo "Installing python 3"
     brew install python3
-
 fi
 
 # Update Pip2 packages
-# /usr/local/bin/pip2 install -U pip setuptools wheel
+# ${PIP_CMD} install -U pip setuptools wheel
 echo "Upgrade pip, setuptools and wheel packages"
-/usr/local/bin/pip3 install -U pip setuptools wheel
-
+${PIP_CMD} install -U pip setuptools wheel
 
 # Install Ansible
-if [[ ! -x "/usr/local/bin/ansible" ]]; then
+if [[ ! -x "${ANSIBLE_CMD}" ]]; then
     echo "Installing ansible"
-    /usr/local/bin/pip3 install ansible kerberos pywinrm
+    ${PIP_CMD} install ansible kerberos pywinrm
 fi
 
 
@@ -89,17 +119,17 @@ if [ -f ~/.ssh/known_hosts ]; then
 
   IS_HOST_DEFINED=`grep github.com ~/.ssh/known_hosts`
   if [ "${IS_HOST_DEFINED}" != "" ]; then
-    ssh-keyscan -H githuub.com >> ~/.ssh/known_hosts
+    ssh-keyscan -H github.com >> ~/.ssh/known_hosts
   fi
 fi
 
-if [ ! -d ${GIT_REPO_DIR} ]; then
+if [ ! -d ${GIT_REPO_PARENT_DIR} ]; then
         echo Installing requirements
-        cd ${GIT_REPO_DIR} || exit
-        git clone ${REPO_URL} system_config
-        cd system_config || exit
-        ansible-galaxy role install -r roles/requirements.yml
-        ansible-galaxy collection install -r roles/requirements.yml
+        cd ${GIT_REPO_PARENT_DIR} || exit
+        git clone ${REPO_URL}
+        cd mac-dev-playbook || exit
+        ansible-galaxy role install -r ${APP_HOME}/roles/requirements.yml
+        ansible-galaxy collection install -r ${APP_HOME}/roles/requirements.yml
 fi
 
 if [ ! -d ${HOME}/logs ]; then
