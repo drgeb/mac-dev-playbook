@@ -5,8 +5,11 @@
 - name: 'Ensure we clone myclone project'
   ansible.builtin.git:
     repo: '{{myclone_project_repo}}'
-    dest: '{{git_project_workspace_dir}}'
+    dest: '{{git_project_workspace_dir}}/myclone'
     version: master
+
+- name: 'Ensure we install and setup myclone'
+  script: '{{git_project_workspace_dir}}/myclone/install.sh'
 
 - name: 'Ensure xclip is installed'
   package:

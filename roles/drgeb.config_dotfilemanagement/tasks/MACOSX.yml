@@ -2,7 +2,7 @@
 - name: Ensure config alias exists.
   lineinfile:
     path: "/{{ dev_home }}/{{ dev_user }}/.aliases"
-    line: "alias config='git --git-dir=${HOME}/{{ config_bare_repo_location }} --work-tree=${HOME}'"
+    line: "alias config='git --git-dir={{ git_project_workspace_dir }}/cfg --work-tree=${HOME}'"
     owner: "{{ dev_user }}"
     regexp: "^alias config="
     state: present
@@ -24,12 +24,12 @@
 - name: Ensure config git project bare clone exists in home folder
   ansible.builtin.git:
       repo: "{{ git_cfg_repo }}"
-      dest: "{{ git_project_workspace_dir}}/{{ config_bare_repo_location }}"
+      dest: "{{ git_project_workspace_dir }}/cfg"
       version: latest
       bare: yes
 
 - name: Ensure the bare repo checkout exists and origin is properly set.
   shell: 
-      git --git-dir=/{{ dev_home }}/{{ dev_user }}/{{ config_bare_repo_location }} --work-tree=${HOME} checkout UbuntuApp --force 
+      git --git-dir=/{{ git_project_workspace_dir }}/cfg --work-tree={{ ansible_env.HOME }} checkout UbuntuApp --force 
   args:
-    creates: ${HOME}/bin/setup/setup-dev.sh
+    creates: "{{ ansible_env.HOME }}/bin/setup/setup-dev.sh"
