@@ -3,7 +3,7 @@
 declare GIT_REPO_PARENT_DIR=${HOME}/workspace/git/github.com/drgeb
 declare GIT_REPO_DIR=${GIT_REPO_PARENT_DIR}/mac-dev-playbook
 declare REPO_URL=https://github.com/drgeb/mac-dev-playbook.git
-declare BREW_CMD="brew"
+declare BREW_CMD="/opt/homebrew/bin/brew"
 declare SQLITE_CMD="sqlite"
 declare ANSIBLE_CMD="ansible"
 declare PIP_CMD="pip3" 
@@ -53,7 +53,7 @@ fi
 # Install brew
 if [[ ! -x "${BREW_CMD}" ]]; then
     echo "Installing brew"
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(${BREW_CMD} shellenv)"
 fi
 
