@@ -2,13 +2,20 @@
 roles:
   - name: elliotweiser.osx-command-line-tools
   - name: geerlingguy.dotfiles
+  - name: geerlingguy.homebrew
   - name: fernandrone.intellij
+  - name: nileshgule.ansible-role-visual-studio-code-extensions
   - name: gantsign.oh-my-zsh
   - name: gantsign.antigen
   - name: gantsign.antigen_bundles
   - name: viasite-ansible.zsh
   - name: drew-kun.nerdfonts
   - name: tkimball83.iterm2
+  - name: ccdc.teamcity_agent
+  - name: lwalley.ansible-role-iterm2
+    src: git+https://github.com/lwalley/ansible-role-iterm2.git
+    scm: git
+    version: master
 collections:
   - name: geerlingguy.mac
   - name: kb9zzw.garage

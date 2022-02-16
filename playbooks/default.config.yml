@@ -10,6 +10,7 @@ configure_ohmyzsh: false
 configure_tilt: false
 configure_teamcity: false
 configure_outlook: false
+configure_docker: false
 
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: false

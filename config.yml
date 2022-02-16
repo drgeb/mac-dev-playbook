@@ -1,16 +1,22 @@
 ---
 downloads: ~/.ansible-downloads/
 
+configure_homebrew: false
 configure_dotfiles: false
 configure_terminal: false
 configure_osx: false
-configure_vscode: false
+configure_vscode: true
 configure_vagrant: false
 configure_asdf: false
 configure_docker: false
 configure_intellij: false
 configure_iterm2: false
-configure_tilt: true
+configure_tilt: false
+configure_myclone: false
+configure_teamcity: false
+configure_dotfilemanagement: false
+configure_ohmyzsh: false
+configure_outlook: false
 
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: false
@@ -19,8 +25,8 @@ dockitems_persist: []
 
 configure_sudoers: false
 sudoers_custom_config: ''
-workspace: '{{ ansible_env.HOME }}/workspace'
-git_project_workspace_dir: '{{ workspace }}/git/izeay'
+workspace_dir: '{{ ansible_env.HOME }}/workspace'
+git_project_workspace_dir: '{{ ansible_env.HOME }}/workspace/git/izeay'
 git_cfg_repo: 'git@izeay:drgeb/cfg.git'
 git_myclone_repo: 'git@izeay:drgeb/myclone.git'
 dev_home: 'Users'
@@ -40,14 +46,22 @@ homebrew_installed_packages:
   - tree
   - packer
   - gnu-tar
+  - molecule
+  - mas
+  - asciinema 
+  - thefuck
+  - antigen
+  - tmux
+
 homebrew_taps:
   - homebrew/core
   - homebrew/cask
   - homebrew/cask-fonts #Used by iosevka fonts
-  - buildpacks/tap/pack
+#  - buildpacks/tap/pack
 
 homebrew_cask_appdir: /Applications
 homebrew_cask_apps:
+  - coreutils # needed my dircolors to colorize ls
   - beyond-compare
   - chromedriver
   - font-alegreya
@@ -57,6 +71,10 @@ homebrew_cask_apps:
 #  - google-chrome
   - iterm2
   - vnc-viewer
+  - aviatrix-vpn-client
+  - evernote
+  - postman
+  - sourcetree
 
 # See `geerlingguy.mas` role documentation for usage instructions.
 mas_installed_apps: []
@@ -86,7 +104,7 @@ asdf_init_shell: false
 asdf_version: "v0.9.0"
 
 asdf_apt_global_dependencies: ["unzip", "git", "curl", "autoconf", "automake", "gcc",
-"g++", "make", "patch", "pkg-config", "binutils", "libtool", "bison", "libreadline-dev", "automake", "autoconf", "build-essential", "libreadline-dev", "libncurses-dev", "libssl-dev", "libyaml-dev", "libxslt-dev", "libffi-dev", "libtool", "unzip", "git", "curl", "pkg-config", "libpcre3-dev", "zlib1g", "zlib1g-dev", "liblzma-dev"]
+"g++", "make", "patch", "pkg-config", "binutils", "libtool", "bison", "libreadline-dev", "automake", "autoconf", "build-essential", "libreadline-dev", "libncurses-dev", "libssl-dev", "libyaml-dev", "libxslt-dev", "libffi-dev", "libtool", "unzip", "git", "curl", "pkg-config", "libpcre3-dev", "zlib1g", "zlib1g-dev", "liblzma-dev", "tar", "gpg"]
 
 asdf_plugins:
     #- name: .net core
@@ -183,8 +201,8 @@ asdf_plugins:
     #	- name: dhall
     #	- name: digdag
     - name: direnv
-      versions: ["2.9.0"]
-      global: "2.9.0"
+      versions: ["latest"]
+      global: "latest"
     #	- name: dive
     #	- name: djinni
     #	- name: docker-slim
@@ -357,8 +375,8 @@ asdf_plugins:
     #	- name: kube-controller-tools
     #	- name: kubebuilder
     - name: kubectl
-      versions: ["1.9.9"]
-      global: "1.9.9"
+      versions: ["latest"]
+      global: "latest"
     #	- name: kubectl-bindrole
     #	- name: kubectx
     #	- name: kubefedctl
@@ -581,7 +599,7 @@ intellij_version: '2021.3.1'
 intellij_mirror: 'http://download.jetbrains.com/idea'
 
 # Edition to install (community or ultimate)
-intellij_edition: community
+intellij_edition: ultimate
 
 # Set to 'false' so it skips the installation of Intellij IDEA in case it is
 # already installed (even if a different version than requested)
@@ -604,6 +622,11 @@ users:
     intellij_jdks:
       - name: 'corretto-11.0.14.9.1' # The name use want to use for this JDK
         home: '.asdf/installs/java/corretto-11.0.14.9.1' 
+      - name: 'corretto-8.322.06.1' # The name use want to use for this JDK
+        home: '.asdf/installs/java/corretto-8.322.06.1'
+      - name: 'corretto-17.0.2.8.1' # The name use want to use for this JDK
+        home: '.asdf/installs/java/corretto-17.0.2.8.1'
+
         # The path to the JDK home.
     # The name of the JDK you want to be the default for new projects.
     # Required if you specify `intellij_jdks`.
@@ -623,7 +646,7 @@ users:
       - # Plugin ID of plugin to install
     # Ultimate Edition only: location of the IntelliJ license key on the Ansible master.
     # Your license key can be found at ~/.IntelliJIdea2017.1/config/idea.key
-    intellij_license_key_path: # e.g. '/vagrant/idea.key'
+    intellij_license_key_path: ~/.ssh/idea.key # e.g. '/vagrant/idea.key'
 
 # Directory to store files downloaded for IntelliJ IDEA installation
 intellij_download_dir: "{{ x_ansible_download_dir | default(ansible_env.HOME + '/.ansible/tmp/downloads') }}"
@@ -635,3 +658,61 @@ zsh_user: gerry.bennett
 zsh_antigen_bundles_extras:
   - joel-porquet/zsh-dircolors-solarized
 zsh_autosuggestions_bind_key: "^U"
+
+# teamcity_build_user_password: GBennett2022
+# teamcity_build_username: gerry.bennett
+# teamcity_build_username: gerry.bennett
+# teamcity_agent_install_dir: /Users/{{ teamcity_build_username }}/workspace/teamcity
+# teamcity_server_url: http://teamcity.infrastructure.ninjarmm.pri:8111/
+# teamcity_agent_java_home_macos: /Users/gerry.bennett/.asdf/installs/java/corretto-11.0.14.9.1
+
+iterm2_defaults:
+  - name: PrefsCustomFolder
+    type: string
+    value: "~/workspace/git/izeay/repos/master/tools/iterm2"
+  - name: LoadPrefsFromCustomFolder
+    type: bool
+    value: true
+  # - name: OnlyWhenMoreTabs
+  #   type: string
+  #   value: 0
+  # - name: PromptOnQuit
+  #   type: bool
+  #   value: false
+iterm2_fonts:
+  - url: https://github.com/powerline/fonts/blob/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf?raw=true
+# GUIDs for dynamic profile must be unique, if one already exists the
+# profile will not be loaded.
+iterm2_dynamic_profiles: []
+  # - url: https://api.bitbucket.org/2.0/repositories/example/example/src/master/iTerm2/DynamicProfiles/example.json
+  #   user: example
+  #   password: 123abc
+iterm2_dynamic_profiles_local: []
+  # - ~/path/to/profiles/example.json
+iterm2_preferences_custom_folder: "~/workspace/git/izeay/repos/master/tools/iterm2"
+# If loading preferences from a custom folder your default profile GUID
+# will likely already be set, so you can skip adding the profile GUID.
+# iterm2_default_profile_guid: 40B423CE-3599-4BF2-8C92-33CE033157B1
+# iterm2_shell_integration: yes
+
+
+# The VS Code build variant:
+#   stable   - https://code.visualstudio.com
+#   insiders - https://code.visualstudio.com/insiders/
+#   oss      - https://github.com/microsoft/vscode/wiki/Differences-between-the-repository-and-Visual-Studio-Code
+#              Caution: since Microsoft doesn't distribute binaries for code-oss
+#              this role doesn't include tests for code-oss.
+#              Note: VSCodium is not presently supported by this role.
+visual_studio_code_extensions_build: stable
+
+# gantsign.visual-studio-code-extensions
+users:
+  - username: "{{ lookup('env', 'USER') }}"
+    visual_studio_code_extensions:
+      - streetsidesoftware.code-spell-checker
+      - wholroyd.jinja
+      - ms-python.python
+      - prometheux-ar/cyberpunk
+      - shanalikhan/code-settings-sync
+    visual_studio_code_extensions_absent:
+      - seanmcbreen.Spell
