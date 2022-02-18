@@ -1,0 +1,31 @@
+---
+# defaults file for drgeb.datagrip
+
+# DataGrip version number
+datagrip_version: '2021.3.4'
+
+# Mirror where to dowload DataGrip redistributable package from
+# Using HTTP because of https://github.com/ansible/ansible/issues/11579
+datagrip_mirror: 'http://download.jetbrains.com/datagrip'
+
+# Edition to install (community or ultimate)
+datagrip_edition: community
+
+# Base installation directory for any DataGrip distribution
+datagrip_install_dir: /opt/datagrip/datagrip-{{ datagrip_edition }}-{{ datagrip_version }}
+
+# Location of the default Apache Maven installation for DataGrip projects
+# Defaults to value of ansible_local.maven.general.home (see gantsign.maven role)
+datagrip_default_maven_home: '{{ ((((ansible_local | default(dict())).maven | default(dict())).general | default(dict())).home | default(None)) }}'
+
+# URL for DataGrip plugin manager web service
+datagrip_plugin_manager_url: 'https://plugins.jetbrains.com/pluginManager/'
+
+# List of users to configure DataGrip for
+users: []
+
+# Directory to store files downloaded for DataGrip installation
+datagrip_download_dir: "{{ x_ansible_download_dir | default(ansible_env.HOME + '/.ansible/tmp/downloads') }}"
+
+# Timeout for DataGrip download response in seconds
+datagrip_download_timeout_seconds: 600

@@ -1,0 +1,23 @@
+---
+datagrip_file_extension: "-aarch64.dmg"
+datagrip_install_dir: "/Applications"
+datagrip_app_name: "DATAGRIP"
+datagrip_user_config_dir: "./Library/Application Support{{ (datagrip_version is regex('^20[2-9][0-9]\\.')) | ternary('/JetBrains/' + datagrip_user_dir, datagrip_user_dir + '/config') }}"
+datagrip_user_plugins_dir: "./Library/Application Support{{ (datagrip_version is regex('^20[2-9][0-9]\\.')) | ternary('/JetBrains/' + datagrip_user_dir + '/plugins', datagrip_user_dir + '/config/plugins') }}"
+user_home_location: "/Users/"
+datagrip_product_info_dir: '{{ datagrip_install_dir }}/{{ datagrip_app_name }}.app/Contents/Resources'
+
+# filename of DataGrip redistributable package
+datagrip_redis_filename: 'datagrip-{{ datagrip_version }}{{ datagrip_file_extension }}'
+
+# Name to use in the desktop link
+datagrip_application_name: IntelliJ IDEA Community Edition
+
+# Dockbar group
+datagrip_startup_wm_class: jetbrains-datagrip
+
+# Name of desktop file
+datagrip_desktop_filename: jetbrains-datagrip.desktop
+
+# Name of the directory where user specific settings are stored
+datagrip_user_dir: "DataGrip{{ datagrip_version | regex_replace('^([0-9]+\\.[0-9]+)(\\..*)?$', '\\1') }}"

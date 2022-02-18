@@ -1,0 +1,187 @@
+---
+- name: include OS family specific vars
+  with_first_found:
+    - "../vars/{{ ansible_os_family }}-{{ ansible_machine }}.yml"
+    - "../vars/{{ ansible_os_family }}.yml"
+    - ../vars/main.yml
+  include_vars: "{{ item }}"
+
+- name: install dependencies
+  become: yes
+  when: ansible_os_family != 'Darwin'
+  package:
+    name: "{{ datagrip_dependencies }}"
+    state: present
+
+- name: create download directory
+  file:
+    state: directory
+    mode: "u=rwx,go=rx"
+    dest: "{{ datagrip_download_dir }}"
+
+- name: stat install dir
+  ansible.builtin.stat:
+    path: "{{ datagrip_product_info_dir }}"
+  register: stat_install_dir
+
+- name: Get datagrip product json (default)
+  set_fact:
+    installed_version: "0.0.0"
+
+- name: "Get datagrip product json content"
+  when: (stat_install_dir.stat.exists is defined and stat_install_dir.stat.exists)
+  ansible.builtin.slurp:
+    src: "{{ datagrip_product_info_dir }}/product-info.json"
+  register: project_json_data
+
+- name: Get datagrip product json
+  when: (stat_install_dir.stat.exists is defined and stat_install_dir.stat.exists)
+  set_fact:
+    installed_version: "{{ project_json_data['content'] | b64decode | from_json }}"
+
+- name: Set should download new versionn
+  set_fact:
+    should_download_and_install: "{{ not stat_install_dir.stat.exists or (installed_version.version != datagrip_version and datagrip_force) }}"
+
+- name: get sha from jetbrains
+  set_fact:
+    datagrip_sha256sum: "{{ lookup('url', datagrip_mirror + '/' + datagrip_redis_filename + '.sha256', split_lines=False) }}"
+
+- name: download datagrip
+  get_url:
+    url: "{{ datagrip_mirror }}/{{ datagrip_redis_filename }}"
+    dest: "{{ datagrip_download_dir }}/{{ datagrip_redis_filename }}"
+    checksum: "sha256:{{ datagrip_sha256sum[:64] }}"
+    force: no
+    use_proxy: yes
+    validate_certs: yes
+    timeout: "{{ datagrip_download_timeout_seconds }}"
+    mode: "u=rw,go=r"
+  when: should_download_and_install | bool
+
+- name: create datagrip installation directory
+  when: ansible_os_family != 'Darwin' and should_download_and_install
+  become: yes
+  file:
+    state: directory
+    owner: root
+    group: root
+    mode: "u=rwx,go=rx"
+    dest: "{{ datagrip_install_dir }}"
+
+- name: Remove previous installation
+  file:
+    path: "/{{ datagrip_install_dir }}/{{ datagrip_app_name }}.app"
+    state: absent
+  when: ansible_os_family == 'Darwin' and should_download_and_install
+
+- name: install datagrip
+  become: yes
+  when: ansible_os_family != 'Darwin' and should_download_and_install
+  unarchive:
+    src: "{{ datagrip_download_dir }}/{{ datagrip_redis_filename }}"
+    remote_src: yes
+    extra_opts: "--strip-components=1"
+    dest: "{{ datagrip_install_dir }}"
+    owner: root
+    group: root
+    mode: "o-w"
+    creates: "{{ datagrip_install_dir }}/bin"
+
+- name: create bin link
+  when: ansible_os_family != 'Darwin' and should_download_and_install
+  become: yes
+  file:
+    src: "{{ datagrip_install_dir }}/bin/idea.sh"
+    dest: /usr/local/bin/idea
+    state: link
+    owner: root
+    group: root
+    mode: "u=rwx,go=rx"
+
+- name: install datagrip desktop file
+  become: yes
+  when: ansible_os_family != 'Darwin' and should_download_and_install
+  template:
+    src: jetbrains-idea.desktop.j2
+    dest: "/usr/share/applications/{{ datagrip_desktop_filename }}"
+    owner: root
+    group: root
+    mode: "u=rw,go=r"
+
+## OSX
+- name: Create tmp dir as dmg mounting point;
+  file:
+    path: ./tmp/
+    mode: "u=rwx,go=rx"
+    state: directory
+  when: should_download_and_install and ansible_os_family == 'Darwin'
+
+- name: Mount dmg to tmp dir
+  command: hdiutil attach '{{ datagrip_download_dir }}/{{ datagrip_redis_filename }}' -nobrowse -mountpoint ./tmp/idea
+  when: should_download_and_install and ansible_os_family == 'Darwin'
+
+- name: Attempt to copy application and gracefully unmount dmg
+  block:
+    - name: Copy app to {{ datagrip_install_dir }}.
+      synchronize:
+        src: './tmp/idea/{{ datagrip_app_name | replace(" ", "\ ") }}.app'
+        dest: '{{ datagrip_install_dir | replace(" ", "\ ") }}'
+        recursive: yes
+        delete: yes
+      delegate_to: "{{ inventory_hostname }}"
+      when: should_download_and_install and ansible_os_family == 'Darwin'
+
+  always:
+    - name: Unmount dmg
+      command: hdiutil detach ./tmp/idea/
+      when: should_download_and_install and ansible_os_family == 'Darwin'
+
+    - name: Remove tmp mounting dir
+      file:
+        path: ./tmp/
+        state: absent
+      when: should_download_and_install and ansible_os_family == 'Darwin'
+
+- name: install Ansible facts.d directory (Linux)
+  become: yes
+  when: ansible_os_family != 'Darwin'
+  file:
+    state: directory
+    dest: /etc/ansible/facts.d
+    owner: root
+    group: root
+    mode: "u=rwx,go=rx"
+
+- name: install datagrip facts (Linux)
+  become: yes
+  when: ansible_os_family != 'Darwin'
+  template:
+    src: facts.j2
+    dest: /etc/ansible/facts.d/datagrip.fact
+    owner: root
+    group: root
+    mode: "u=rw,go=r"
+
+- name: install Ansible facts.d directory (OSX)
+  become: yes
+  when: ansible_os_family == 'Darwin'
+  file:
+    state: directory
+    dest: /etc/ansible/facts.d
+    owner: root
+    group: wheel
+    mode: "u=rwx,go=rx"
+
+- name: install datagrip facts (OSX)
+  become: yes
+  when: ansible_os_family == 'Darwin'
+  template:
+    src: facts.j2
+    dest: /etc/ansible/facts.d/datagrip.fact
+    owner: root
+    group: wheel
+    mode: "u=rw,go=r"
+
+- name: re-read facts
+  setup: filter=ansible_local

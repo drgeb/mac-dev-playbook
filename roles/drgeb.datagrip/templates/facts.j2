@@ -1,0 +1,8 @@
+{{ ansible_managed | comment }}
+
+[general]
+home={{ datagrip_install_dir }}
+desktop_filename={{ datagrip_desktop_filename }}
+desktop_file=/usr/share/applications/{{ datagrip_desktop_filename }}
+user_config_dir={{ datagrip_user_config_dir }}
+user_plugins_dir={{ datagrip_user_plugins_dir }}
