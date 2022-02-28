@@ -1,16 +1,23 @@
 ---
 downloads: '~/.ansible-downloads/'
 
-configure_dotfiles: false
+configure_homebrew: false #PASSED
 configure_terminal: false
-configure_osx: false
-configure_myclone: false
+configure_osx: false #PASSED
+configure_vscode: false #PASSED
+configure_vagrant: true 
+configure_asdf: false #PASSED
+configure_docker: false #PASSED
+configure_intellij: false #TODO NEED LICENSE INSTALLED
+configure_iterm2: false #PASSED
+configure_tilt: false #PASSED
+configure_myclone: false #TODO FIX
+configure_teamcity: false #Not needed
+configure_dotfiles: false #DON'T USE: This is geerlings way
 configure_dotfilemanagement: false
-configure_ohmyzsh: false
-configure_tilt: false
-configure_teamcity: false
-configure_outlook: false
-configure_docker: false
+configure_ohmyzsh: false #PASSED
+configure_outlook: false #PASSED
+configure_datagrip: false #PASSED
 
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: false
