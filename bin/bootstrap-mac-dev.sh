@@ -77,18 +77,22 @@ if [[ ! -d "${SQLITE_CMD}" ]]; then
     brew install sqlite
 fi
 
-# Install Tcl/Tk
-# if [[ ! -d "/usr/local/Cellar/tcl-tk" ]]; then
-#    echo "Installing tcl-tk"
-#    brew install tcl-tk --with-threads
-#fi
+# TODO Install ASDF
+# TODO Install ASDF python plugin
+# TODO Install ASDF python latest version
+# TODO Setup global python version to latest
+# TODO Setup virtualenv called ansible
 
-# Install Python 2
-#if [[ ! -d "/usr/local/Cellar/python" ]]; then
-#    echo "Installing python 2"
-#    brew install python --with-berkeley-db4
-#fi
+# Activate this new virtualenv
+if [ -f ~/.virtualenvs/ansible/bin/activate ]; then
+    source ~/.virtualenvs/ansible/bin/activate
+fi
 
+# TODO install ansible
+
+###########################################################################
+# Older style
+###########################################################################
 # Install Python 3
 if [[ ! -d "/usr/local/Cellar/python@3.9" ]]; then
     echo "Installing python 3"
@@ -98,14 +102,13 @@ fi
 # Update Pip2 packages
 # ${PIP_CMD} install -U pip setuptools wheel
 echo "Upgrade pip, setuptools and wheel packages"
-${PIP_CMD} install -U pip setuptools wheel
+${PIP_CMD} install -U pip setuptools wheel lxml
 
 # Install Ansible
 if [[ ! -x "${ANSIBLE_CMD}" ]]; then
     echo "Installing ansible"
     ${PIP_CMD} install ansible kerberos pywinrm
 fi
-
 
 if [ ! -d ${GIT_REPO_PARENT_DIR} ]; then
     mkdir -pv ${GIT_REPO_PARENT_DIR}
