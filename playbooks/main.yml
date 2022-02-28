@@ -30,9 +30,6 @@
     - role: drgeb.vscode 
       when: configure_vscode
       tags: ['vscode']
-    - role: kb9zzw.garage.vagrant
-      when: configure_vagrant
-      tags: ['vagrant']
     # - role: geerlingguy.mac.homebrew
     #   homebrew_installed_packages: '{{ asdf_apt_global_dependencies }}'
     #   when: configure_asdf
@@ -69,6 +66,12 @@
     - role: drgeb.iterm2
       when: configure_iterm2
       tags: ['iterm2']
+    - role: drgeb.datagrip
+      when: configure_datagrip
+      tags: ['datagrip']
+    - role: drgeb.vagrant
+      when: configure_vagrant
+      tags: ['vagrant']
   tasks:
     - import_tasks: tasks/sudoers.yml
       when: configure_sudoers

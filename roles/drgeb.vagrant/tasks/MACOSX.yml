@@ -1,14 +1,82 @@
 ---
 
+# - name: software | vagrant | install binary
+#   become: true
+#   unarchive:
+#     src: https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_linux_amd64.zip
+#     dest: /usr/local/bin
+#     remote_src: yes
+#     mode: 0755
+#     owner: root
+#     group: root
+#   when:
+#     - vagrant is defined
+#     - vagrant
 - name: software | vagrant | install binary
-  become: true
-  unarchive:
-    src: https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_linux_amd64.zip
-    dest: /usr/local/bin
-    remote_src: yes
-    mode: 0755
-    owner: root
-    group: root
+  community.general.homebrew_cask:
+    name: vagrant
+    state: present
   when:
-    - vagrant is defined
+    - configure_vagrant is defined
+    - configure_vagrant
+
+- name: Get vagrant version if installed
+  command: 'vagrant --version'
+  register: vagrant_installed_version
+  changed_when: False
+  ignore_errors: True
+  tags:
     - vagrant
+    - install
+
+- name: Ensure vagrant plugins brew dependencies.
+  community.general.homebrew:
+    name: '{{ item }}'
+    state: present
+  with_items: "{{ vagrant_plugin_dependencies }}"
+  when:
+    - configure_vagrant is defined
+    - configure_vagrant
+
+# - name: Ensure vagrant plugins brew cask dependencies.
+#   community.general.homebrew_cask:
+#     name: '{{ item }}'
+#     state: present
+#   with_items: "{{ vagrant_plugin_cask_dependencies }}"
+#   when:
+#     - configure_vagrant is defined
+#     - configure_vagrant
+
+- name: List installed Vagrant plugins
+  become: True
+  shell: "su - {{ vagrant_plugins_user }} -c 'vagrant plugin list'"
+  changed_when: False
+  register: vagrant_initial_plugins_list
+  when: "{{ vagrant_plugins_user != '' }}"
+  tags:
+    - vagrant
+    - install
+
+- name: Install Vagrant plugins
+  become: True
+  shell: "su - {{ vagrant_plugins_user }} -c 'vagrant plugin install {{ item.name }}'"
+  with_items: "{{ vagrant_plugins }}"
+  when:
+    - "{{ vagrant_plugins_user != '' }}"
+    - "{{ item.state == 'present' }}"
+    - "{{ item.name not in vagrant_initial_plugins_list.stdout }}"
+  tags:
+    - vagrant
+    - install
+
+- name: Uninstall Vagrant plugins
+  become: True
+  shell: "su - {{ vagrant_plugins_user }} -c 'vagrant plugin uninstall {{ item.name }}'"
+  with_items: "{{ vagrant_plugins }}"
+  when:
+    - "{{ vagrant_plugins_user != '' }}"
+    - "{{ item.state == 'absent' }}"
+    - "{{ item.name in vagrant_initial_plugins_list.stdout }}"
+  tags:
+    - vagrant
+    - install
