@@ -46,6 +46,9 @@
     - role: drgeb.teamcity
       when: configure_teamcity
       tags: ['teamcity']
+    - role: drgeb.terraformer
+      when: configure_terraformer  
+      tags: ['terraformer']
     - role: drgeb.tilt
       when: configure_tilt   
       tags: ['tilt']
