@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include drgeb.outlook"
+      include_role:
+        name: "drgeb.outlook"

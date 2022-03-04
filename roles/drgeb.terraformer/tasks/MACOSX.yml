@@ -1,0 +1,22 @@
+---
+
+- name: 'Ensure we clone terraformer project'
+  ansible.builtin.git:
+    repo: '{{ terraformer_project_repo }}'
+    dest: '{{ terraformer_project_workspace_dir }}'
+    version: master
+
+- name: 'Ensure go mod is installed'
+  ansible.builtin.shell: 
+    cmd: >
+      go mod download
+    args:
+      chdir: '{{ terraformer_project_workspace_dir }}'
+
+- name: 'Ensure go build all providers'
+  ansible.builtin.shell: 
+    cmd: >
+      go build -v
+    args:
+      chdir: '{{ terraformer_project_workspace_dir }}'
+

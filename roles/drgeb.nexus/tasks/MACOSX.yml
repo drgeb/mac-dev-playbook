@@ -1,0 +1,41 @@
+---
+- name: Ensure install dependencies.
+  include_tasks: install-dependencies.yml
+
+- name: 'Ensure we clone sample nexus sonatype project'
+  ansible.builtin.git:
+    repo: '{{ sample_project_repo }}'
+    dest: '{{ sample_project_workspace_dir }}'
+    version: master
+
+- name: Ensure we install all ansible pip dependencies
+  pip:
+    name: '{{ item }}'
+  loop: '{{ pip_packages }}'
+
+- name: Ensure sonatype/nexus-oss image is build
+  community.docker.docker_image:
+    build:
+      path: '{{ sample_project_workspace_dir }}'
+    name: sonatype/nexus 
+    tag: oss
+    source: build
+
+- name: Ensure sonatype/nexus-pro image is build
+  community.docker.docker_image:
+    build:
+      path: '{{ sample_project_workspace_dir }}'
+    name: sonatype/nexus
+    tag: pro
+    source: build
+
+- name: Ensure docker volume nexus-data exists
+  community.docker.docker_volume:
+    name: nexus-data
+
+- name: Ensure docker-compose for nexus is up and running
+  community.docker.docker_compose:
+    project_src: '{{ sample_project_workspace_dir }}'
+    build: no
+  register: output
+

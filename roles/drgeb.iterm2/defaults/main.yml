@@ -1,0 +1,6 @@
+---
+# defaults file for drgeb.iterm2
+iterm2_color_schemes_repo: "https://github.com/mbadolato/iTerm2-Color-Schemes.git"
+iterm2_color_schemes_dir: "{{ workspace_dir }}/git/github.com/mbadolato/iTerm2-Color-Schemes"
+repos_project_repo: "git@izeay:drgeb/repos.git"
+repos_project_dir: "{{ workspace_dir }}/git/izeay/repos"

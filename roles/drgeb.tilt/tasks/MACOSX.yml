@@ -1,0 +1,14 @@
+---
+- name: Ensure latest tilt and kind are available they are managed by asdf.
+  include_tasks: asdf.yml
+
+- name: Ensure we install cattle patrol using brew
+  community.general.homebrew:
+    name: tilt-dev/tap/ctlptl
+    state: present
+  
+- name: 'Ensure we clone sample tilt project'
+  ansible.builtin.git:
+    repo: '{{ sample_project_repo }}'
+    dest: '{{ sample_project_workspace_dir }}'
+    version: master

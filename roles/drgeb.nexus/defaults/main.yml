@@ -1,0 +1,22 @@
+---
+# defaults file for drgeb.tilt
+platform: ''
+workspace_dir: '{{ ansible_env.HOME }}/workspace'
+sample_project_repo: 'git@github.com:drgeb/docker-nexus.git'
+sample_project_workspace_dir: '{{ workspace_dir }}/git/github.com/drgeb/docker-nexus'
+
+homebrew_installed_packages:
+  - git
+  - wget
+
+homebrew_taps:
+  - homebrew/core
+  - homebrew/cask
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+  - docker
+
+pip_packages:
+  - docker
+  - pyyaml

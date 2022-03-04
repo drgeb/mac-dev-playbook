@@ -1,0 +1,13 @@
+---
+- name: Ensure latest python is available, managed by asdf.
+  include_tasks: asdf.yml
+
+- name: Ensure pyobjc-framework-LaunchServices is available
+  pip:
+    name: pyobjc-framework-LaunchServices
+
+- name: Ensure set_default_outlook script is executed.
+  ansible.builtin.script: "{{ role_path }}/files/set_default_outlook.py"
+  args:
+    executable: python3
+

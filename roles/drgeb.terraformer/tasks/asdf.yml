@@ -1,0 +1,69 @@
+---
+- name: check for asdf
+  stat:
+    path: "{{ ansible_env.HOME }}/.asdf"
+  register: asdf
+
+- name: ensure asdf tilt plugin is installed.
+  shell: |
+    . {{ ansible_env.HOME }}/.asdf/asdf.sh
+    asdf plugin add tilt https://github.com/virtualstaticvoid/asdf-tilt.git
+  args:
+    executable: /bin/bash
+    creates: "{{ ansible_env.HOME }}/.asdf/plugins/tilt"
+  when: asdf.stat.exists
+
+- name: ensure specific tilt versions are installed.
+  become: false
+  shell: |
+    . {{ ansible_env.HOME }}/.asdf/asdf.sh
+    asdf install tilt {{ item }}
+  args:
+    executable: /bin/bash
+  register: asdf_install
+  changed_when: '"is already installed" not in asdf_install.stdout'
+  with_items:
+    - "{{ tilt_versions }}"
+  when: asdf.stat.exists
+
+- name: set global version
+  become: false
+  shell: |
+    . {{ ansible_env.HOME }}/.asdf/asdf.sh
+    asdf global tilt {{ tilt_global_version }}
+  args:
+    executable: /bin/bash
+  changed_when: false
+  when: asdf.stat.exists and tilt_global_version != None
+
+- name: ensure asdf kind plugin is installed.
+  shell: |
+    . {{ ansible_env.HOME }}/.asdf/asdf.sh
+    asdf plugin add kind
+  args:
+    executable: /bin/bash
+    creates: "{{ ansible_env.HOME }}/.asdf/plugins/kind"
+  when: asdf.stat.exists
+
+- name: ensure specific kind versions are installed.
+  become: false
+  shell: |
+    . {{ ansible_env.HOME }}/.asdf/asdf.sh
+    asdf install kind {{ item }}
+  args:
+    executable: /bin/bash
+  register: asdf_install
+  changed_when: '"is already installed" not in asdf_install.stdout'
+  with_items:
+    - "{{ kind_versions }}"
+  when: asdf.stat.exists
+
+- name: set global version
+  become: false
+  shell: |
+    . {{ ansible_env.HOME }}/.asdf/asdf.sh
+    asdf global kind {{ kind_global_version }}
+  args:
+    executable: /bin/bash
+  changed_when: false
+  when: asdf.stat.exists and kind_global_version != None

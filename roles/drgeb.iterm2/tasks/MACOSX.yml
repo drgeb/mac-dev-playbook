@@ -1,0 +1,24 @@
+---
+- name: Ensure iterm2 is installed
+  include_role: 
+    name: tkimball83.iterm2
+- name: Ensure iTerm directories are initialized if they are not already.
+  include_role:
+    name: lwalley.ansible-role-iterm2
+
+- name: 'Ensure we clone iterm2 color schemes'
+  ansible.builtin.git:
+    repo: '{{ iterm2_color_schemes_repo }}'
+    dest: '{{ iterm2_color_schemes_dir }}'
+
+- name: 'Ensure color schemes are imported'
+  ansible.builtin.shell:
+    chdir: '{{ iterm2_color_schemes_dir }}'
+    cmd: tools/import-scheme.sh schemes/*
+  run_once: true
+
+- name: 'Ensure we clone iterm configuration from repo'
+  ansible.builtin.git:
+    repo: '{{ repos_project_repo }}'
+    dest: '{{ repos_project_dir }}'
+    version: master  
