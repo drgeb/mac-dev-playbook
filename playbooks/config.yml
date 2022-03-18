@@ -65,6 +65,10 @@ homebrew_installed_packages:
   - cmatrix
   - plantuml
   - watchman # watch files and indicate if they change
+  - autoenv # https://github.com/hyperupcall/autoenv configuration is inside setup-dev.sh
+  - skype
+  - discord
+  - 7zip
 
 homebrew_taps:
   - homebrew/core
@@ -815,4 +819,6 @@ vagrant_plugins:
   - name: vagrant-share
     state: present
   - name: vagrant-vbguest
+    state: present
+  - name: vagrant-parallels
     state: present
