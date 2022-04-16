@@ -4,7 +4,7 @@ asdf_dir: '{{ ansible_env.HOME }}/.asdf'
 downloads: ~/.ansible-downloads/
 
 configure_homebrew: false #PASSED
-configure_terminal: true
+configure_terminal: false
 configure_osx: false #PASSED
 configure_vscode: false #PASSED
 configure_vagrant: false #PASSED 
@@ -14,17 +14,30 @@ configure_intellij: false #TODO NEED LICENSE INSTALLED
 configure_iterm2: false #PASSED
 configure_tilt: false #PASSED
 configure_myclone: false #TODO FIX
-configure_terraformer: true
+configure_terraformer: false
 # configure_teamcity: false #Not needed
 # configure_dotfiles: false #DON'T USE: This is geerlings way
 configure_dotfilemanagement: false
 configure_ohmyzsh: false #PASSED
 configure_outlook: false #PASSED
 configure_datagrip: false #PASSED
+configure_dock: true # Set to 'true' to configure the Dock via dockutil.
 
-# Set to 'true' to configure the Dock via dockutil.
-configure_dock: false
-dockitems_remove: []
+dockitems_remove: 
+  - Launchpad
+  - Safari
+  - Messages
+  - Mail
+  - Maps
+  - Photos
+  - FaceTime
+  - Calendar
+  - Contacts
+  - Reminders
+  - Notes
+  - TV
+  - Music
+
 dockitems_persist: []
 
 configure_sudoers: false
@@ -66,8 +79,7 @@ homebrew_installed_packages:
   - plantuml
   - watchman # watch files and indicate if they change
   - autoenv # https://github.com/hyperupcall/autoenv configuration is inside setup-dev.sh
-  - skype
-  - discord
+  # - discord #Causing issues cause already installed
   - 7zip
 
 homebrew_taps:
@@ -90,11 +102,17 @@ homebrew_cask_apps:
   - evernote
   - postman
   - sourcetree
-  - google-chrome
+  # - google-chrome
   - cyberduck
   - oktadeveloper/tap/okta
-
+  - spectacle
+  - clipy # https://clipy-app.com/
+  - aerial # https://aerialscreensaver.github.io/#:~:text=Aerial%20is%20a%20macOS%20screensaver,videos%20introduced%20in%20tvOS%2013.
 # See `geerlingguy.mas` role documentation for usage instructions.
+  - jetbrains-toolbox
+#  - zoom #zoom is managed bby IT Administrator
+  - skype
+
 mas_installed_apps: []
 mas_email: ""
 mas_password: ""
