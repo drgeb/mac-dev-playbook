@@ -6,8 +6,7 @@ declare REPO_URL=https://github.com/drgeb/mac-dev-playbook.git
 declare BREW_CMD="/opt/homebrew/bin/brew"
 declare SQLITE_CMD="sqlite"
 declare ANSIBLE_CMD="ansible"
-declare PIP_CMD="pip3"
-declare VIRTUAL_ENVS_DIR=~/.virtualenvs
+declare PIP_CMD="pip3" 
 
 ################################################################################
 
@@ -60,17 +59,17 @@ fi
 
 # This homebrew/dupes is deprecated
 # brew tap homebrew/dupes
-#brew tap aws/tap
-#brew tap bramstein/webfonttools
-#brew tap caryll/tap
-#brew tap cloudfoundry/tap
-#brew tap d12frosted/emacs-plus
-#brew tap goreleaser/tap
-#brew tap jenkins-x/jx
-#brew tap pivotal/tap
-#brew tap weaveworks/tap
-#brew tap webhookrelay/tap
-#brew tap yschimke/tap
+brew tap aws/tap
+brew tap bramstein/webfonttools
+brew tap caryll/tap
+brew tap cloudfoundry/tap
+brew tap d12frosted/emacs-plus
+brew tap goreleaser/tap
+brew tap jenkins-x/jx
+brew tap pivotal/tap
+brew tap weaveworks/tap
+brew tap webhookrelay/tap
+brew tap yschimke/tap
 
 # Install sqllite
 if [[ ! -d "${SQLITE_CMD}" ]]; then
@@ -78,49 +77,27 @@ if [[ ! -d "${SQLITE_CMD}" ]]; then
     brew install sqlite
 fi
 
-# Install ASDF
-export ASDF_VERSION=v0.10.0
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION}
+# TODO Install ASDF
+# TODO Install ASDF python plugin
+# TODO Install ASDF python latest version
+# TODO Setup global python version to latest
+# TODO Setup virtualenv called ansible
 
-# Install ASDF python plugin
-asdf install plugin python
-asdf install plugin java
-asdf install plugin nodejs https://github.com/asdf-vm/asdf-nodejs.git
-
-# Install ASDF python latest version
-asdf install python 3.10.4
-asdf install java corretto-8.322.06.4
-
-# Setup global python version to latest
-asdf global python 3.10.4
-asdf global java corretto-8.322.06.4
-
-python3 -m pip install --user --upgrade pip
-
-# Setup virtualenv called ansible
 # Activate this new virtualenv
-if [ ! -d ${VIRTUAL_ENVS_DIR} ]; then
-    mkdir ${VIRTUAL_ENVS_DIR}
-fi
-if [ ! -d ${VIRTUAL_ENVS_DIR}/ansible ]; then
-    python3 -m venv ${VIRTUAL_ENVS_DIR}/ansible
-fi
-# Activate this new virtualenv
-if [ -f ${VIRTUAL_ENVS_DIR}/ansible/bin/activate ]; then
-    source ${VIRTUAL_ENVS_DIR}/ansible/bin/activate
+if [ -f ~/.virtualenvs/ansible/bin/activate ]; then
+    source ~/.virtualenvs/ansible/bin/activate
 fi
 
 # TODO install ansible
-pip3 install -r requirements.txt
 
 ###########################################################################
 # Older style
 ###########################################################################
 # Install Python 3
-#if [[ ! -d "/usr/local/Cellar/python@3.9" ]]; then
-#    echo "Installing python 3"
-#    brew install python3
-#fi
+if [[ ! -d "/usr/local/Cellar/python@3.9" ]]; then
+    echo "Installing python 3"
+    brew install python3
+fi
 
 # Update Pip2 packages
 # ${PIP_CMD} install -U pip setuptools wheel
