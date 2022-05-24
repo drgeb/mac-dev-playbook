@@ -6,7 +6,8 @@ declare REPO_URL=https://github.com/drgeb/mac-dev-playbook.git
 declare BREW_CMD="/opt/homebrew/bin/brew"
 declare SQLITE_CMD="sqlite"
 declare ANSIBLE_CMD="ansible"
-declare PIP_CMD="pip3" 
+declare PIP_CMD="pip3"
+declare VIRTUAL_ENVS_DIR=~/.virtualenvs
 
 ################################################################################
 
@@ -39,6 +40,7 @@ APP_BASE_NAME=`basename "$0"`
 set -euo pipefail
 IFS=$'\n\t'
 
+################################################################################
 # Install the Command Line Tools
 set +e
 xcode-select -p
@@ -50,6 +52,7 @@ if [[ "$RETVAL" -ne "0" ]]; then
     read -p "Continue? [Enter]"
 fi
 
+################################################################################
 # Install brew
 if [[ ! -x "${BREW_CMD}" ]]; then
     echo "Installing brew"
@@ -59,48 +62,68 @@ fi
 
 # This homebrew/dupes is deprecated
 # brew tap homebrew/dupes
-brew tap aws/tap
-brew tap bramstein/webfonttools
-brew tap caryll/tap
-brew tap cloudfoundry/tap
-brew tap d12frosted/emacs-plus
-brew tap goreleaser/tap
-brew tap jenkins-x/jx
-brew tap pivotal/tap
-brew tap weaveworks/tap
-brew tap webhookrelay/tap
-brew tap yschimke/tap
+#brew tap aws/tap
+#brew tap bramstein/webfonttools
+#brew tap caryll/tap
+#brew tap cloudfoundry/tap
+#brew tap d12frosted/emacs-plus
+#brew tap goreleaser/tap
+#brew tap jenkins-x/jx
+#brew tap pivotal/tap
+#brew tap weaveworks/tap
+#brew tap webhookrelay/tap
+#brew tap yschimke/tap
 
+################################################################################
 # Install sqllite
 if [[ ! -d "${SQLITE_CMD}" ]]; then
     echo "Installing sqlite"
     brew install sqlite
 fi
 
-# TODO Install ASDF
-# TODO Install ASDF python plugin
-# TODO Install ASDF python latest version
-# TODO Setup global python version to latest
-# TODO Setup virtualenv called ansible
+################################################################################
+# Install ASDF
+export ASDF_VERSION=v0.10.0
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION}
 
+################################################################################
+# Install ASDF java, python, nodejs plugins
+asdf install plugin python
+asdf install plugin java
+asdf install plugin nodejs https://github.com/asdf-vm/asdf-nodejs.git
+
+# Install ASDF python latest version
+asdf install python 3.10.4
+asdf install java corretto-8.322.06.4
+
+# Setup global python version to latest
+asdf global python 3.10.4
+asdf global java corretto-8.322.06.4
+
+################################################################################
+# Upgrade pip
+python3 -m pip install --user --upgrade pip
+
+################################################################################
+# Setup virtualenv called ansible
 # Activate this new virtualenv
-if [ -f ~/.virtualenvs/ansible/bin/activate ]; then
-    source ~/.virtualenvs/ansible/bin/activate
+if [ ! -d ${VIRTUAL_ENVS_DIR} ]; then
+    mkdir ${VIRTUAL_ENVS_DIR}
+fi
+if [ ! -d ${VIRTUAL_ENVS_DIR}/ansible ]; then
+    python3 -m venv ${VIRTUAL_ENVS_DIR}/ansible
+fi
+# Activate this new virtualenv
+if [ -f ${VIRTUAL_ENVS_DIR}/ansible/bin/activate ]; then
+    source ${VIRTUAL_ENVS_DIR}/ansible/bin/activate
 fi
 
+################################################################################
 # TODO install ansible
+pip3 install -r requirements.txt
 
-###########################################################################
-# Older style
-###########################################################################
-# Install Python 3
-if [[ ! -d "/usr/local/Cellar/python@3.9" ]]; then
-    echo "Installing python 3"
-    brew install python3
-fi
 
 # Update Pip2 packages
-# ${PIP_CMD} install -U pip setuptools wheel
 echo "Upgrade pip, setuptools and wheel packages"
 ${PIP_CMD} install -U pip setuptools wheel lxml
 
@@ -110,6 +133,8 @@ if [[ ! -x "${ANSIBLE_CMD}" ]]; then
     ${PIP_CMD} install ansible kerberos pywinrm
 fi
 
+################################################################################
+# Configure initial setup ssh for github and bitbucket
 if [ ! -d ${GIT_REPO_PARENT_DIR} ]; then
     mkdir -pv ${GIT_REPO_PARENT_DIR}
 fi
@@ -126,6 +151,7 @@ if [ -f ~/.ssh/known_hosts ]; then
   fi
 fi
 
+################################################################################
 if [ ! -d ${GIT_REPO_PARENT_DIR} ]; then
         echo Installing requirements
         cd ${GIT_REPO_PARENT_DIR} || exit
