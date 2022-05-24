@@ -7,6 +7,4 @@ if [ ! -d ${HOME}/logs ]; then
     mkdir ${HOME}/logs
 fi
 
-source ~/.virtualenvs/ansible/bin/activate
-
 ansible-playbook playbooks/main.yml --ask-become-pass  -vvvvv 2>&1 | tee ~/logs/${DATE}-ansible-playbook.log
