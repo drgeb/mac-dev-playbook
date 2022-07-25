@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include vagrant"
-      include_role:
-        name: "vagrant"

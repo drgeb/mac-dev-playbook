@@ -1,4 +1,0 @@
----
-- name: "Include teamcity"
-  include_role:
-    name: "ccdc.teamcity_agent"

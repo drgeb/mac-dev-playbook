@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include drgeb.datagrip"
-      include_role:
-        name: "drgeb.datagrip"

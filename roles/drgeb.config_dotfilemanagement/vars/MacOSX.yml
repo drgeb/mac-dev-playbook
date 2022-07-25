@@ -1,4 +1,0 @@
-dev_home: Users
-git_cfg_repo: 'git@izeay:drgeb/cfg.git'
-git_project_workspace_dir: '{{ ansible_env.HOME }}/workspace/git/izeay/'
-git_cfg_project_workspace_dir: '{{ git_project_workspace_dir }}/.bare'

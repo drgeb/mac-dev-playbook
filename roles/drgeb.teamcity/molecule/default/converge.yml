@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include drgeb.teamcity"
-      include_role:
-        name: "drgeb.teamcity"

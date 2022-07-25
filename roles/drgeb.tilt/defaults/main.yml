@@ -1,5 +1,0 @@
----
-# defaults file for drgeb.tilt
-platform: ''
-sample_project_repo: 'https://github.com/tilt-dev/tilt-example-python.git'
-sample_project_workspace_dir: '{{ workspace_dir }}/git/github.com/tilt-dev/tilt-example-python'

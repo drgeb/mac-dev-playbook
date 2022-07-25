@@ -1,8 +1,0 @@
----
-
-- include: install_tasks.yml
-  become_user: "{{ datagrip_install_user}}"
-  when: datagrip_install_user is defined
-
-- include: install_tasks.yml
-  when: datagrip_install_user is not defined

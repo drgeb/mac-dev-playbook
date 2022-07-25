@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include drgeb.iterm2"
-      include_role:
-        name: "drgeb.iterm2"

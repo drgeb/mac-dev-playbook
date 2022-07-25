@@ -1,4 +1,0 @@
----
-# - name: Ensure docker is installed
-#   include_role:
-#     name: geerlingguy.mac.homebrew
