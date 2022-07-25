@@ -3,7 +3,7 @@ workspace_dir: '{{ ansible_env.HOME }}/workspace'
 asdf_dir: '{{ ansible_env.HOME }}/.asdf'
 downloads: ~/.ansible-downloads/
 
-configure_homebrew: false #PASSED
+configure_homebrew: true #PASSED
 configure_terminal: false
 configure_osx: false #PASSED
 configure_vscode: false #PASSED
@@ -22,6 +22,8 @@ configure_ohmyzsh: false #PASSED
 configure_outlook: false #PASSED
 configure_datagrip: false #PASSED
 configure_dock: true # Set to 'true' to configure the Dock via dockutil.
+configure_spacemacs: true
+configure_wallpapers: false
 
 dockitems_remove: 
   - Launchpad
@@ -81,6 +83,7 @@ homebrew_installed_packages:
   - autoenv # https://github.com/hyperupcall/autoenv configuration is inside setup-dev.sh
   # - discord #Causing issues cause already installed
   - 7zip
+  - rmlink
 
 homebrew_taps:
   - homebrew/core

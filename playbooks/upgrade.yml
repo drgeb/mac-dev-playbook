@@ -1,0 +1,147 @@
+---
+- hosts: all
+
+  vars_files:
+    - default.config.yml
+
+  pre_tasks:
+    - name: Include playbook configuration.
+      include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: ['always']
+
+  tasks:
+    # - name: "Ensure brew upgrade for all packages"
+    #   community.general.homebrew:
+    #     update_homebrew: yes
+    #     upgrade_all: yes
+
+    - name: "Ensure asdf is up dated to the latest version"
+      ansible.builtin.shell:
+        cmd: asdf
+ 
+    - name: "Ensure all plugins are updated to latest commit on default branch"
+      ansible.builtin.shell:
+        cmd: asdf plugin update --all
+
+    - name: "Ensure npm is updated to the latest"
+      ansible.builtin.shell:
+        cmd: npm install npm@latest -g
+
+    - name: "Ensure all npm packages installed globally are updated"
+      ansible.builtin.shell:
+        cmd: npm --location=global update
+
+    - name: "Ensure spacemacs is up to date"
+      ansible.builtin.git:
+        repo: https://github.com/syl20bnr/spacemacs
+        dest: ~/.emacs.d
+        version: develop
+        recursive: yes
+        update: yes
+
+    - name: Ensure ruby gems are up to date
+      ansible.builtin.shell: |
+        gem update --system -n /usr/local/bin
+        exit 0
+
+    - name: install the package, force upgrade
+      pip:
+        name: pip
+        executable: pip3
+        state: latest
+
+    - name: Ensure Python pip is updated to latest
+      ansible.builtin.shell: |
+        python3 -m pip install --user --upgrade pip
+        ( python3 -m pip freeze | awk 'BEGIN{FS="=="}{print $1}') | xargs python3 -m pip install -U
+        exit 0
+  
+    - name: Ensure npm is updated/installed to the latest
+      ansible.builtin.shell: |
+        npm install npm@latest -g
+        npm update -g
+        exit 0
+
+    - name: "Ensure ohmyzsh is up to date"
+      ansible.builtin.git:
+        repo: https://github.com/ohmyzsh/ohmyzsh.git
+        dest: ~/.oh-my-zsh
+        update: yes
+
+
+    # env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
+
+    - name: Upgrade all installed Mac App Store apps
+      community.general.mas:
+        upgrade_all: yes
+
+    - name: Ensure antigen packages are updated to latest
+      ansible.builtin.shell: |
+        antigen update
+        exit 0
+  # roles:
+  #   # - role: geerlingguy.mac.homebrew
+  #   #   tags: ['homebrew', 'upgrade']
+  #   #   when: configure_homebrew
+  #   # - role: elliotweiser.osx-command-line-tools
+  #   #   when: configure_osx
+  #   #   tags: ['osx', 'upgrade']
+  #   # - role: geerlingguy.dotfiles
+  #   #   when: configure_dotfiles
+  #   #   tags: ['dotfiles', 'upgrade']
+  #   # - role: geerlingguy.mac.mas
+  #   #   when: mas_installed_apps or mas_installed_app_ids
+  #   #   tags: ['mas', 'upgrade']
+  #   # - role: geerlingguy.mac.dock
+  #   #   when: configure_dock
+  #   #   tags: ['dock', 'upgrade']
+  #   - role: drgeb.vscode 
+  #     when: configure_vscode
+  #     tags: ['vscode', 'upgrade']
+  #   # - role: geerlingguy.mac.homebrew
+  #   #   homebrew_installed_packages: '{{ asdf_apt_global_dependencies }}'
+  #   #   when: configure_asdf
+  #   # tags: ['asdf', 'upgrade']
+  #   # - role: markosamuli.asdf
+  #   #   when: configure_asdf
+  #   #   tags: ['asdf', 'upgrade']
+  #   # - role: kb9zzw.garage.docker
+  #   #   when: configure_docker
+  #   #   tags: ['docker', 'upgrade']
+  #   # - role: fernandrone.intellij
+  #   #   when: configure_intellij
+  #   #   tags: ['intellij', 'upgrade']
+  #   - role: drgeb.teamcity
+  #     when: configure_teamcity
+  #     tags: ['teamcity', 'upgrade']
+  #   - role: drgeb.terraformer
+  #     when: configure_terraformer  
+  #     tags: ['terraformer', 'upgrade']
+  #   - role: drgeb.tilt
+  #     when: configure_tilt   
+  #     tags: ['tilt', 'upgrade']
+  #   - role: drgeb.myclone
+  #     when: configure_myclone    
+  #     tags: ['myclone', 'upgrade']
+  #   - role: drgeb.config_dotfilemanagement
+  #     when: configure_dotfilemanagement
+  #     tags: ['dotfiles', 'upgrade']
+  #   - role: drgeb.ohmyzsh
+  #     when: configure_ohmyzsh    
+  #     tags: ['ohmyzsh', 'upgrade']
+  #   - role: drgeb.gpg
+  #     tags: ['gpg', 'upgrade']
+  #   - role: drgeb.outlook
+  #     when: configure_outlook
+  #     tags: ['outlook', 'upgrade']
+  #   - role: drgeb.iterm2
+  #     when: configure_iterm2
+  #     tags: ['iterm2', 'upgrade']
+  #   - role: drgeb.datagrip
+  #     when: configure_datagrip
+  #     tags: ['datagrip', 'upgrade']
+  #   - role: drgeb.vagrant
+  #     when: configure_vagrant
+  #     tags: ['vagrant', 'upgrade']

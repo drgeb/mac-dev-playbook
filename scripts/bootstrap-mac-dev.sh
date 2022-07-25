@@ -35,7 +35,16 @@ APP_BASE_NAME=`basename "$0"`
 #echo APP_BASE_NAME=${APP_BASE_NAME}
 #echo APP_HOME =${APP_HOME}
 ################################################################################
+brew_install() {
+    echo "\nInstalling $1"
+    if brew list $1 &>/dev/null; then
+        echo "${1} is already installed"
+    else
+        brew install $1 && echo "$1 is installed"
+    fi
+}
 
+################################################################################
 # Bash "strict" mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -57,9 +66,10 @@ fi
 if [[ ! -x "${BREW_CMD}" ]]; then
     echo "Installing brew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(${BREW_CMD} shellenv)"
 fi
+eval "$(${BREW_CMD} shellenv)"
 
+################################################################################
 # This homebrew/dupes is deprecated
 # brew tap homebrew/dupes
 #brew tap aws/tap
@@ -76,21 +86,19 @@ fi
 
 ################################################################################
 # Install sqllite
-if [[ ! -d "${SQLITE_CMD}" ]]; then
-    echo "Installing sqlite"
-    brew install sqlite
-fi
+brew_install "sqlite"
 
 ################################################################################
 # Install ASDF
 export ASDF_VERSION=v0.10.0
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION}
-
+if [ ! -d ~/.asdf ]; then
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION}
+fi
 ################################################################################
 # Install ASDF java, python, nodejs plugins
-asdf install plugin python
-asdf install plugin java
-asdf install plugin nodejs https://github.com/asdf-vm/asdf-nodejs.git
+asdf plugin add python
+asdf plugin add java
+asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 
 # Install ASDF python latest version
 asdf install python 3.10.4
@@ -119,10 +127,6 @@ if [ -f ${VIRTUAL_ENVS_DIR}/ansible/bin/activate ]; then
 fi
 
 ################################################################################
-# TODO install ansible
-pip3 install -r requirements.txt
-
-
 # Update Pip2 packages
 echo "Upgrade pip, setuptools and wheel packages"
 ${PIP_CMD} install -U pip setuptools wheel lxml

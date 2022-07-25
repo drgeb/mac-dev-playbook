@@ -103,23 +103,31 @@
       tags: ['post']
 
     - name: Ensure wallpapers repo is available
+      when: configure_wallpapers
       ansible.builtin.git:
         repo: git@github.com:makccr/wallpapers.git
         dest: "{{ workspace_dir }}/git/github.com/makccr/wallpapers"
+      tags: ['wallpapers']
 
     - name: Ensure a symbolic link in Pictures to wallpapers
+      when: configure_wallpapers
       ansible.builtin.file:
         src: "{{ workspace_dir }}/git/github.com/makccr/wallpapers"
         dest: "{{ ansible_env.HOME }}/Pictures/wallpapers-mackccr"
         state: link
+      tags: ['wallpapers']
 
     - name: Ensure wallpapers-ii repo is available
+      when: configure_wallpapers
       ansible.builtin.git:
         repo: git@github.com:makccr/wallpapers-ii.git
         dest: "{{ workspace_dir }}/git/github.com/makccr/wallpapers-ii"
+      tags: ['wallpapers']
 
     - name: Ensure a symbolic link in Pictures to wallpapers
+      when: configure_wallpapers
       ansible.builtin.file:
         src: "{{ workspace_dir }}/git/github.com/makccr/wallpapers-ii"
         dest: "{{ ansible_env.HOME }}/Pictures/wallpapers-ii-mackccr"
         state: link
+      tags: ['wallpapers']

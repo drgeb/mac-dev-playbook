@@ -1,7 +1,8 @@
 ---
 - name: converge
-  hosts: all
-  become: yes
+  hosts: mac
+  remote_user: vagrant
+  become: false
   gather_facts: yes
 
   roles:

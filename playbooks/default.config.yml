@@ -18,6 +18,7 @@ configure_dotfilemanagement: false
 configure_ohmyzsh: false #PASSED
 configure_outlook: false #PASSED
 configure_datagrip: false #PASSED
+configure_wallpapers: false
 
 # Set to 'true' to configure the Dock via dockutil.
 configure_dock: false

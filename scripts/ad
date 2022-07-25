@@ -11,4 +11,4 @@ if [ ! -z ${LOG_DIR} ]; then
 fi
 LOG_FILE=${LOG_DIR}/driver-windows.log
 
-ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml | tee ${LOG_FILE}
+ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml -kK | tee ${LOG_FILE}
