@@ -1,34 +1,42 @@
 ---
-- name: Install global Composer packages.
-  composer:
-    command: "{{ (item.state | default('present') == 'absent') | ternary('remove', 'require') }}"
-    arguments: "{{ item.name | default(item) }} {{ item.version | default('@stable') }}"
-    # Ansible 2.4 supports `global_command` making `working_dir` optional.
-    working_dir: "{{ lookup('env', 'COMPOSER_HOME') | default('~/.composer', true) }}"
-  loop: "{{ composer_packages }}"
+    - name: Install global Composer packages.
+      composer:
+          command: "{{ (composer_item.state | default('present') == 'absent') | ternary('remove', 'require') }}"
+          arguments: "{{ composer_item.name | default(composer_item) }} {{ composer_item.version | default('@stable') }}"
+    #  Ansible 2.4 supports `global_command` making `working_dir` optional.
+          working_dir: "{{ lookup('env', 'COMPOSER_HOME') | default('~/.composer', true) }}"
+      loop_control:
+          loop_var: composer_item
+      loop: '{{ composer_packages }}'
 
-- name: Install global NPM packages.
-  npm:
-    name: "{{ item.name | default(item) }}"
-    state: "{{ item.state | default('present') }}"
-    version: "{{ item.version | default(omit) }}"
-    global: true
-    executable: "{{ item.executable | default(omit) }}"
-  loop: "{{ npm_packages }}"
+    - name: Install global NPM packages.
+      ansible.builtin.npm:
+          name: '{{ npm_item.name | default(npm_item) }}'
+          state: "{{ npm_item.state | default('present') }}"
+          version: '{{ npm_item.version | default(omit) }}'
+          global: true
+          executable: '{{ npm_item.executable | default(omit) }}'
+      loop_control:
+          loop_var: npm_item
+      loop: '{{ npm_packages }}'
 
-- name: Install global Pip packages.
-  pip:
-    name: "{{ item.name | default(item) }}"
-    state: "{{ item.state | default('present') }}"
-    version: "{{ item.version | default(omit) }}"
-    executable: "{{ item.executable | default(omit) }}"
-  loop: "{{ pip_packages }}"
+    - name: Install global Pip packages.
+      ansible.builtin.pip:
+          name: '{{ pip_item.name | default(pip_item) }}'
+          state: "{{ pip_item.state | default('present') }}"
+          version: '{{ pip_item.version | default(omit) }}'
+          executable: '{{ pip_item.executable | default(omit) }}'
+      loop_control:
+          loop_var: pip_item
+      loop: '{{ pip_packages }}'
 
-- name: Install global Ruby gems.
-  gem:
-    name: "{{ item.name | default(item) }}"
-    state: "{{ item.state | default('present') }}"
-    version: "{{ item.version | default(omit) }}"
-    user_install: false
-    executable: "{{ item.executable | default(omit) }}"
-  loop: "{{ gem_packages }}"
+    - name: Install global Ruby gems.
+      ansible.builtin.gem:
+          name: '{{ gem_item.name | default(gem_item) }}'
+          state: "{{ gem_item.state | default('present') }}"
+          version: '{{ gem_item.version | default(omit) }}'
+          user_install: false
+          executable: '{{ gem_item.executable | default(omit) }}'
+      loop_control:
+          loop_var: gem_item
+      loop: '{{ gem_packages }}'

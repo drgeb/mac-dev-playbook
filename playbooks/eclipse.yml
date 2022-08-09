@@ -1,9 +1,9 @@
 ---
-- name: converge
-  hosts: mac
-  remote_user: vagrant
-  become: false
-  gather_facts: yes
+    - name: converge
+      hosts: mac
+      remote_user: vagrant
+      become: false
+      gather_facts: yes
 
-  roles:
-    - role: albanandrieu.eclipse
+      roles:
+          - role: albanandrieu.eclipse
