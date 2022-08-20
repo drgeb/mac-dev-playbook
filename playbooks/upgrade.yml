@@ -12,10 +12,10 @@
             tags: [always]
 
       tasks:
-    # - name: "Ensure brew upgrade for all packages"
-    #   community.general.homebrew:
-    #     update_homebrew: true
-    #     upgrade_all: true
+          - name: "Ensure brew upgrade for all packages"
+            community.general.homebrew:
+              update_homebrew: true
+              upgrade_all: true
 
           - name: Ensure asdf is up dated to the latest version
             ansible.builtin.command:
@@ -37,13 +37,13 @@
                 cmd: npm --location=global update
             changed_when: false
 
-          - name: Ensure spacemacs is up to date
-            ansible.builtin.git:
-                repo: https://github.com/syl20bnr/spacemacs
-                dest: ~/.emacs.d
-                version: develop
-                recursive: true
-                update: true
+          #- name: Ensure spacemacs is up to date
+          #  ansible.builtin.git:
+          #      repo: https://github.com/syl20bnr/spacemacs
+          #      dest: ~/.emacs.d
+          #      version: develop
+          #      recursive: true
+          #      update: true
 
           - name: Ensure ruby gems are up to date
             ansible.builtin.shell: |
