@@ -1,9 +1,15 @@
 ---
-    - hosts: mac
-      remote_user: vagrant
-      vars:
-          configure_gradle: true
-      roles:
-          - role: drgeb.gradle
-            tags: [configure_gradle]
-            when: configure_gradle
+- hosts: mac
+  remote_user: vagrant
+
+  collections:
+    - drgeb.development
+
+  vars:
+    configure_gradle: true
+
+  tasks:
+    - import_role:
+        name: drgeb.development.gradle
+      tags: [configure_gradle]
+      when: configure_gradle

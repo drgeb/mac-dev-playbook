@@ -7,42 +7,44 @@
   vars:
     brew_cask_packages: []
     brew_packages:
-    - python
+      - python
     install_homebrew_if_missing: true
     upgrade_homebrew_packages: true
     home: /Users/vagrant
     ssh_config:
-    - instance: izeay
-      private_key: ed25519_izeay
-      owner: vagrant
-      group: staff
-      mode: og-rwx,u-wx,u+r
-      address: bitbucket.org
-      user: git
-      port: '443'
-      IdentitiesOnly: true
-      identity_file: /Users/gerry.bennett/.ssh/ed25519_izeay
-    - instance: bitbucket.org
-      private_key: id_rsa_bitbucket
-      owner: vagrant
-      group: staff
-      mode: og-rwx,u-wx,u+r
-      address: bitbucket.org
-      user: git
-      port: '443'
-      IdentitiesOnly: true
-      identity_file: /Users/gerry.bennett/.ssh/id_rsa_bitbucket
-    - instance: github.com
-      private_key: id_rsa_github
-      owner: vagrant
-      group: staff
-      mode: og-rwx,u-wx,u+r
-      address: github.com
-      user: git
-      port: '443'
-      IdentitiesOnly: true
-      identity_file: /Users/gerry.bennett/.ssh/id_rsa_github
+      - instance: izeay
+        private_key: ed25519_izeay
+        owner: vagrant
+        group: staff
+        mode: og-rwx,u-wx,u+r
+        address: bitbucket.org
+        user: git
+        port: "443"
+        IdentitiesOnly: true
+        identity_file: /Users/gerry.bennett/.ssh/ed25519_izeay
+      - instance: bitbucket.org
+        private_key: id_rsa_bitbucket
+        owner: vagrant
+        group: staff
+        mode: og-rwx,u-wx,u+r
+        address: bitbucket.org
+        user: git
+        port: "443"
+        IdentitiesOnly: true
+        identity_file: /Users/gerry.bennett/.ssh/id_rsa_bitbucket
+      - instance: github.com
+        private_key: id_rsa_github
+        owner: vagrant
+        group: staff
+        mode: og-rwx,u-wx,u+r
+        address: github.com
+        user: git
+        port: "443"
+        IdentitiesOnly: true
+        identity_file: /Users/gerry.bennett/.ssh/id_rsa_github
 
-  roles:
-  - drgeb.homebrew
-  - drgeb.ssh_configuration
+  tasks:
+    - import_role:
+        name: drgeb.development.homebrew
+    - import_role:
+        name: drgeb.development.ssh_configuration

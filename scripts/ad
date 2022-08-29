@@ -1,5 +1,29 @@
 #!/usr/bin/env sh
 
+############################################################
+# Attempt to set APP_HOME
+# Resolve links:  may be a link
+PRG="$0"
+# Need this for relative symlinks.
+while [ -h "PRG" ] ; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '.*-> .*$'`
+    if expr "$link" : /.* > /dev/null; then
+        PRG="$link"
+    else
+        PRG=`dirname "$PRG"`"/$link"
+    fi
+done
+SAVED="`pwd`"
+cd "`dirname "$PRG"`/.." >/dev/null
+APP_HOME="`pwd -P`"
+cd "$SAVED" >/dev/null
+
+APP_NAME="mac-dev-playbook"
+APP_BASE_NAME=`basename "$0"`
+
+############################################################
+
 PLAYBOOK=${1:-main}
 ENVIRONMENT=${2:-dev}
 LOG_DIR=${3:-~/logs}
@@ -11,4 +35,8 @@ if [ ! -z ${LOG_DIR} ]; then
 fi
 LOG_FILE=${LOG_DIR}/driver-windows.log
 
-ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml -kK | tee ${LOG_FILE}
+if [ ! -z SILENT ]; then
+    ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml -kK | tee ${LOG_FILE}
+else
+    ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml -kK -vvvv | tee ${LOG_FILE}
+fi

@@ -1,5 +1,8 @@
 ---
-    - hosts: all
+- hosts: all
+
+  collections:
+    - drgeb.development
 
   # vars_files:
   #   - default.config.yml
@@ -11,7 +14,8 @@
   #       - "{{ playbook_dir }}/config.yml"
   #     tags: ['always']
 
-      roles:
-          - role: drgeb.spacemacs
-            tags: [spacemacs]
-            when: configure_spacemacs
+  tasks:
+    - import_role:
+        name: drgeb.development.spacemacs
+      tags: [spacemacs]
+      when: configure_spacemacs

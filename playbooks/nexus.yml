@@ -1,6 +1,10 @@
 ---
-    - hosts: all
+- hosts: all
+  collections:
+    - drgeb.development
 
-      roles:
-          - role: drgeb.nexus
-            tags: [nexus]
+  tasks:
+    - import_role:
+        name: drgeb.development.nexus
+      tags: [nexus]
+      when: configure_nexus

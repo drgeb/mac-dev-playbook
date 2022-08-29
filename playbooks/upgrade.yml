@@ -1,95 +1,97 @@
 ---
-    - hosts: all
+- hosts: all
 
-      vars_files:
-          - default.config.yml
+  collections:
+    - drgeb.development
 
-      pre_tasks:
-          - name: Include playbook configuration.
-            ansible.builtin.include_vars: '{{ item }}'
-            with_fileglob:
-                - '{{ playbook_dir }}/config.yml'
-            tags: [always]
+  vars_files:
+    - default.config.yml
 
-      tasks:
-          - name: "Ensure brew upgrade for all packages"
-            community.general.homebrew:
-              update_homebrew: true
-              upgrade_all: true
+  pre_tasks:
+    - name: Include playbook configuration.
+      ansible.builtin.include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: [always]
 
-          - name: Ensure asdf is up dated to the latest version
-            ansible.builtin.command:
-                cmd: asdf
-            changed_when: false
+  tasks:
+    - name: "Ensure brew upgrade for all packages"
+      community.general.homebrew:
+        update_homebrew: true
+        upgrade_all: true
 
-          - name: Ensure all plugins are updated to latest commit on default branch
-            ansible.builtin.command:
-                cmd: asdf plugin update --all
-            changed_when: false
+    - name: Ensure asdf is up dated to the latest version
+      ansible.builtin.command:
+        cmd: asdf
+      changed_when: false
 
-          - name: Ensure npm is updated to the latest
-            ansible.builtin.command:
-                cmd: npm install npm@latest -g
-            changed_when: false
+    - name: Ensure all plugins are updated to latest commit on default branch
+      ansible.builtin.command:
+        cmd: asdf plugin update --all
+      changed_when: false
 
-          - name: Ensure all npm packages installed globally are updated
-            ansible.builtin.command:
-                cmd: npm --location=global update
-            changed_when: false
+    - name: Ensure npm is updated to the latest
+      ansible.builtin.command:
+        cmd: npm install npm@latest -g
+      changed_when: false
 
-          #- name: Ensure spacemacs is up to date
-          #  ansible.builtin.git:
-          #      repo: https://github.com/syl20bnr/spacemacs
-          #      dest: ~/.emacs.d
-          #      version: develop
-          #      recursive: true
-          #      update: true
+    - name: Ensure all npm packages installed globally are updated
+      ansible.builtin.command:
+        cmd: npm --location=global update
+      changed_when: false
 
-          - name: Ensure ruby gems are up to date
-            ansible.builtin.shell: |
-                gem update --system -n /usr/local/bin
-                exit 0
-            changed_when: false
+    #- name: Ensure spacemacs is up to date
+    #  ansible.builtin.git:
+    #      repo: https://github.com/syl20bnr/spacemacs
+    #      dest: ~/.emacs.d
+    #      version: develop
+    #      recursive: true
+    #      update: true
 
-          - name: install the package, force upgrade
-            ansible.builtin.pip:
-                name: pip
-                executable: pip3
-                state: latest
+    - name: Ensure ruby gems are up to date
+      ansible.builtin.shell: |
+        gem update --system -n /usr/local/bin
+        exit 0
+      changed_when: false
 
-          - name: Ensure Python pip is updated to latest
-            ansible.builtin.shell: |
-                set -o pipefail
-                python3 -m pip install --user --upgrade pip
-                ( python3 -m pip freeze | awk 'BEGIN{FS="=="}{print $1}') | xargs python3 -m pip install -U
-                exit 0
-            changed_when: false
+    - name: install the package, force upgrade
+      ansible.builtin.pip:
+        name: pip
+        executable: pip3
+        state: latest
 
-          - name: Ensure npm is updated/installed to the latest
-            ansible.builtin.shell: |
-                npm install npm@latest -g
-                npm update -g
-                exit 0
-            changed_when: false
+    - name: Ensure Python pip is updated to latest
+      ansible.builtin.shell: |
+        set -o pipefail
+        python3 -m pip install --user --upgrade pip
+        ( python3 -m pip freeze | awk 'BEGIN{FS="=="}{print $1}') | xargs python3 -m pip install -U
+        exit 0
+      changed_when: false
 
-          - name: Ensure ohmyzsh is up to date
-            ansible.builtin.git:
-                repo: https://github.com/ohmyzsh/ohmyzsh.git
-                dest: ~/.oh-my-zsh
-                update: true
+    - name: Ensure npm is updated/installed to the latest
+      ansible.builtin.shell: |
+        npm install npm@latest -g
+        npm update -g
+        exit 0
+      changed_when: false
+
+    - name: Ensure ohmyzsh is up to date
+      ansible.builtin.git:
+        repo: https://github.com/ohmyzsh/ohmyzsh.git
+        dest: ~/.oh-my-zsh
+        update: true
 
     # env ZSH=$ZSH sh $ZSH/tools/upgrade.sh
 
-          - name: Upgrade all installed Mac App Store apps
-            community.general.mas:
-                upgrade_all: true
+    - name: Upgrade all installed Mac App Store apps
+      community.general.mas:
+        upgrade_all: true
 
-          - name: Ensure antigen packages are updated to latest
-            ansible.builtin.shell: |
-                antigen update
-                exit 0
-            changed_when: false
-
+    - name: Ensure antigen packages are updated to latest
+      ansible.builtin.shell: |
+        antigen update
+        exit 0
+      changed_when: false
 # roles:
 #   # - role: geerlingguy.mac.homebrew
 #   #   tags: ['homebrew', 'upgrade']

@@ -1,13 +1,18 @@
 ---
-    - hosts: mac
-      remote_user: vagrant
-      vars:
-          configure_certificates_and_trust: true
-          certificate_to_import_and_trust_urls:
-              - host: access.ninjarmm.net
-                port: '443'
-          validate_ssl: yes
-      roles:
-          - role: drgeb.import_and_trust_certificate
-            tags: [configure_certificates_and_trust]
-            when: configure_certificates_and_trust
+- hosts: mac
+  remote_user: vagrant
+  collections:
+    - drgeb.development
+
+
+  vars:
+    configure_certificates_and_trust: true
+    certificate_to_import_and_trust_urls:
+      - host: access.ninjarmm.net
+        port: "443"
+    validate_ssl: yes
+  tasks:
+    - import_role:
+        name:  drgeb.development.import_and_trust_certificate
+      tags: [configure_certificates_and_trust]
+      when: configure_certificates_and_trust

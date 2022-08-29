@@ -1,17 +1,21 @@
 ---
-    - hosts: mac
+- hosts: mac
 
-      vars_files:
-          - default.config.yml
+  collections:
+    - drgeb.development
 
-      pre_tasks:
-          - name: Include playbook configuration.
-            ansible.builtin.include_vars: '{{ item }}'
-            with_fileglob:
-                - '{{ playbook_dir }}/config.yml'
-            tags: [always]
+  vars_files:
+    - default.config.yml
 
-      roles:
-          - role: drgeb.spacemacs
-            tags: [spacemacs]
-            when: configure_spacemacs
+  pre_tasks:
+    - name: Include playbook configuration.
+      ansible.builtin.include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: [always]
+
+  tasks:
+    - import_role:
+        name: drgeb.development.spacemacs
+      tags: [spacemacs]
+      when: configure_spacemacs
