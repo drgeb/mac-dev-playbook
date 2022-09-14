@@ -1,0 +1,43 @@
+---
+- hosts: localhost
+  become: false
+  vars:
+    install_application_if_missing: true
+    app_name: Company Portal
+    installer_name: CompanyPortal-Installer.pkg
+    mount_path: '{{playbook_dir}}/../files/downloads/'
+    installed_application_path: "/Applications/Company\ Portal.app"
+    env: sudo
+  pre_tasks:
+    - name: Ensuring {{ app_name }} Is Installed
+      stat:
+        path: '{{ installed_application_path }}'
+      register: companyportal_check
+
+    - name: Fail If {{ app_name }} Is Not Installed and install_application_if_missing Is False
+      fail:
+        msg: "{{ app_name }} is missing, install from http://brew.sh"
+      when:
+        - not companyportal_check.stat.exists
+        - not install_application_if_missing
+
+  tasks:
+    - name: Installing {{ app_name }}
+      ansible.builtin.uri:
+        url: https://go.microsoft.com/fwlink/?linkid=853070
+        dest: '{{ mount_path }}'
+      when:
+        - not companyportal_check.stat.exists
+        - install_application_if_missing
+
+    - name: Define exec path to "{{ mount_path }}/{{ installer_name }}"
+      ansible.builtin.set_fact:
+        pkg_path: "{{ mount_path }}/{{ installer_name }}"
+      when: installer_name | string
+
+    - name: Run install of "{{ app_name }}.pkg"  # noqa no-changed-when
+      ansible.builtin.command: "{{ env }} installer -package '{{ pkg_path | expanduser }}' -target /"
+      failed_when: false
+      when:
+        - not companyportal_check.stat.exists
+        - install_application_if_missing
