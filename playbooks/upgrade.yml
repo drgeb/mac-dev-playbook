@@ -22,7 +22,7 @@
 
     - name: Ensure asdf is up dated to the latest version
       ansible.builtin.command:
-        cmd: asdf
+        cmd: asdf upgrade
       changed_when: false
 
     - name: Ensure all plugins are updated to latest commit on default branch
