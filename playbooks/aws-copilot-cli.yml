@@ -1,0 +1,14 @@
+---
+- name: Install-AWS-Copilot-CLI
+  hosts: mac
+  vars:
+    download_dir: '{{playbook_dir}}/../files/downloads/'
+
+  # https://aws.github.io/copilot-cli/docs/getting-started/install/
+
+  tasks:
+  # Install formula foo with 'brew' in default path
+  - name: Ensure installation of AWS Copilot through Homebrew
+    community.general.homebrew:
+      name: aws/tap/copilot-cli
+      state: present
