@@ -1,0 +1,169 @@
+---
+- hosts: all
+  roles:
+  - role: elliotweiser.osx-command-line-tools
+  - role: geerlingguy.mac.homebrew
+  - role: osx_provisioner.asdf
+    asdf_plugins:
+      - name: "liquibase"
+        versions: ["4.8.0"]
+        global: "4.8.0"
+    #   environment:
+    #     KERL_CONFIGURE_OPTIONS: "--without-javac --with-ssl=/usr/local/opt/openssl@1.1 --disable-hipe"
+    #     CFLAGS: "-O2 -g -fno-stack-check"
+    # - name: "python"
+    #   versions: "3.9.1"
+
+      - name: "java"
+        versions: ["corretto-8.332.08.1"]
+        global: "corretto-8.332.08.1"
+      - name: "ag"
+        versions: ["2.2.0"]
+        global: "2.2.0"
+      - name: "asciidoctorj"
+        versions: ["2.5.3"]
+        global: "2.5.3"
+      - name: "aws-iam-authenticator"
+        versions: ["0.5.3"]
+        global: "0.5.3"
+      - name: "awscli"
+        versions: ["2.7.21"]
+        global: "2.7.21"
+      - name: "bundler"
+        versions: ["2.3.5"]
+        global: "2.3.5"
+      - name: "crossplane-cli"
+        versions: ["1.6.1"]
+        global: "1.6.1"
+      - name: "direnv"
+        versions: ["2.30.3"]
+        global: "2.30.3"
+      - name: "fzf"
+        versions: ["0.29.0"]
+        global:  "0.29.0"
+      - name: "git-chglog"
+        versions: ["0.9.1"]
+        global: "0.9.1"
+      - name: "github-cli"
+        versions: ["2.4.0"]
+        global: "2.4.0"
+      - name: "github-markdown-toc"
+        versions: ["1.2.0"]
+        global: "1.2.0"
+      - name: "golang"
+        versions: ["1.19rc2"]
+        global: "1.19rc2"
+      - name: "jq"
+        versions: ["1.6"]
+        global: "1.6"
+      - name: "gradle"
+        versions: ["7.5.1"]
+        global: "7.5.1"
+      - name: "groovy"
+        versions: ["4.0.0-rc-2"]
+        global: "4.0.0-rc-2"
+      - name: "helm"
+        versions: ["3.8.0-rc.2"]
+        global: "3.8.0-rc.2"
+      - name: "httpie-go"
+        versions: ["0.7.0"]
+        global: "0.7.0"
+      - name: "kind"
+        versions: ["0.11.1"]
+        global: "0.11.1"
+      - name: "kotlin"
+        versions: ["1.6.10"]
+        global: "1.6.10"
+      - name: "kubectl"
+        versions: ["1.23.4"]
+        global: "1.23.4"
+      - name: "kustomize"
+        versions: ["4.4.1"]
+        global: "4.4.1"
+      - name: "maven"
+        versions: ["3.8.4"]
+        global: "3.8.4"
+      - name: "nodejs"
+        versions: ["18.6.0"]
+        global: "18.6.0"
+      - name: "packer"
+        versions: ["1.7.9"]
+        global: "1.7.9"
+      - name: "redis"
+        versions: ["6.2.6"]
+        global: "6.2.6"
+      - name: "redis-cli"
+        versions: ["6.2.6"]
+        global: "6.2.6"
+      - name: "ruby"
+        versions: ["3.1.0"]
+        global: "3.1.0"
+      - name: "spring-boot"
+        versions: ["2.6.3"]
+        global: "2.6.3"
+      - name: "terraform"
+        versions: ["1.1.6"]
+        global: "1.1.6"
+      - name: "terraform-ls"
+        versions: ["0.25.2"]
+        global: "0.25.2"
+      - name: "terraform-validator"
+        versions: ["3.1.3"]
+        global: "3.1.3"
+      - name: "tmux"
+        versions: ["3.2a"]
+        global: "3.2a"
+      - name: "vim"
+        versions: ["8.2.4219"]
+        global: "8.2.4219"
+      - name: "waypoint"
+        versions: ["0.7.1"]
+        global: "0.7.1"
+      - name: "yarn"
+        versions: ["1.22.17"]
+        global: "1.22.17"
+      - name: "yj"
+        versions: ["5.0.0"]
+        global: "5.0.0"
+      - name: "yq"
+        versions: ["4.9.8"]
+        global: "4.9.8"
+      - name: "tilt"
+        versions: ["0.25.0"]
+        global: "0.25.0"
+      - name: "python"
+        versions: ["3.10.5"]
+        global: "3.10.5"
+      - name: "asdf-postgres"
+        versions: ["14.2"]
+        global: "14.2"
+      - name: "liquibase"
+        versions: ["4.8.0"]
+        global: "4.8.0"
+      - name: "jmeter"
+        versions: ["5.4.3"]
+        global: "5.4.3"
+      - name: "lua"
+        versions: ["5.4.4"]
+        global: "5.4.4"
+      - name: "pulumi"
+        versions: ["3.33.2"]
+        global:  "3.33.2"
+      - name: "poetry"
+        versions: ["1.2.0b3"]
+        global: "1.2.0b3"
+      - name: "jbang"
+        versions: ["0.96.4"]
+        global: "0.96.4"
+      - name: "shellcheck"
+        versions: ["0.8.0"]
+        global: "0.8.0"
+      - name: "pgbadger"
+        versions: ["11.8"]
+        global: "11.8"
+      - name: "gopass"
+        versions: ["1.14.4"]
+        global: "1.14.4"
+      - name: shfmt
+        versions: ["3.3.0"]
+        global: "3.3.0"
