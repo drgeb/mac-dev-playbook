@@ -25,9 +25,10 @@ APP_BASE_NAME=`basename "$0"`
 ############################################################
 
 PLAYBOOK=${1:-main}
-ENVIRONMENT=${2:-dev}
-LOG_DIR=${3:-~/logs}
-LOG_FILE=${3:-driver-server.log}
+ENVIRONMENT=${ENVIRONMENT:-dev}
+LOG_DIR=${LOG_DIR:-~/logs}
+LOG_FILE=${LOG_FILE:-driver-server.log}
+OPTIONS=${OPTIONS:-}
 DATE=$(date '+%Y%m%d%H%M%S')
 
 if [ ! -z ${LOG_DIR} ]; then
@@ -36,7 +37,7 @@ fi
 LOG_FILE=${LOG_DIR}/driver-windows.log
 
 if [ ! -z SILENT ]; then
-    ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml -kK | tee ${LOG_FILE}
+    ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml ${OPTIONS} | tee ${LOG_FILE}
 else
-    ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml -kK -vvvv | tee ${LOG_FILE}
+    ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml ${OPTIONS} -vvvv | tee ${LOG_FILE}
 fi
