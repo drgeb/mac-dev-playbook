@@ -1,0 +1,23 @@
+---
+
+- name: Ensure global npm packages are installed
+  hosts: localhost
+  become: false
+  vars:
+    npm_packages:
+      - vsce
+      - cdk
+      - corepack
+      - npm
+      - snyk
+  tasks:
+    - name: Install global NPM packages.
+      ansible.builtin.npm:
+          name: '{{ npm_item.name | default(npm_item) }}'
+          state: "{{ npm_item.state | default('present') }}"
+          version: '{{ npm_item.version | default(omit) }}'
+          global: true
+          executable: '{{ npm_item.executable | default(omit) }}'
+      loop_control:
+          loop_var: npm_item
+      loop: '{{ npm_packages }}'

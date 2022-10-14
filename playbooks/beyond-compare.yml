@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  become: false
+  vars:
+    app_name: Beyond Compare
+    mount_path: '{{playbook_dir}}/../files/downloads/'
+    installer: 'BCompareOSX-4.4.3.26655.zip'
+    env: sudo
+  tasks:
+    - name: "Installing {{ app_name }}"
+      ansible.builtin.uri:
+        url: "https://www.scootersoftware.com/{{ installer }}"
+        dest: '{{ mount_path }}'
+
+    - name: "Unarchive a file that is already on the remote machine"
+      ansible.builtin.unarchive:
+        src: "{{ mount_path }}/{{ installer }}"
+        dest: "{{ mount_path }}"
+        remote_src: yes

@@ -37,7 +37,7 @@
 
     - name: Ensure all npm packages installed globally are updated
       ansible.builtin.command:
-        cmd: npm --location=global update
+        cmd: npm -g update
       changed_when: false
 
     #- name: Ensure spacemacs is up to date
@@ -90,6 +90,12 @@
     - name: Ensure antigen packages are updated to latest
       ansible.builtin.shell: |
         antigen update
+        exit 0
+      changed_when: false
+
+    - name: Ensure all vagrant plugins are updated to latest
+      ansible.builtin.shell: |
+        vagrant plugin update
         exit 0
       changed_when: false
 # roles:

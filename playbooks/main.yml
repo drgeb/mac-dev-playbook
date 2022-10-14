@@ -51,66 +51,66 @@
     when: configure_vscode
     tags: [vscode]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.teamcity
     ansible.builtin.import_role:
       name: drgeb.development.teamcity
     when: configure_teamcity
     tags: [teamcity]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.terraformer
     ansible.builtin.import_role:
       name: drgeb.development.terraformer
     when: configure_terraformer
     tags: [terraformer]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.tilt
     ansible.builtin.import_role:
       name: drgeb.development.tilt
     when: configure_tilt
     tags: [tilt]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.myclone
     ansible.builtin.import_role:
       name: drgeb.development.myclone
     when: configure_myclone
     tags: [myclone]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.config_dotfilemanagement
     ansible.builtin.import_role:
       name: drgeb.development.config_dotfilemanagement
     when: configure_dotfilemanagement
     tags: [dotfiles]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.ohmyzsh
     ansible.builtin.import_role:
       name: drgeb.development.ohmyzsh
     when: configure_ohmyzsh
     tags: [ohmyzsh]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.gpg
     ansible.builtin.import_role:
       name: drgeb.development.gpg
     tags: [gpg]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.outlook
     ansible.builtin.import_role:
         name: drgeb.development.outlook
     when: configure_outlook
     tags: [outlook]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.iterm2
     ansible.builtin.import_role:
       name: drgeb.development.iterm2
     when: configure_iterm2
     tags: [iterm2]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.datagrip
     ansible.builtin.import_role:
       name: drgeb.development.datagrip
     when: configure_datagrip
     tags: [datagrip]
 
-  - name: Run drgeb.development.vscode
+  - name: Run drgeb.development.vagrant
     ansible.builtin.import_role:
       name: drgeb.development.vagrant
     when: configure_vagrant

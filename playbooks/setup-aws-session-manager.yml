@@ -1,0 +1,53 @@
+---
+- name: Setup-AWS-Session-Manager
+  hosts: mac
+  vars:
+    app_name: AWS Session Manager
+    download_dir: '{{playbook_dir}}/../files/downloads/'
+    install_application_if_missing: true
+    installer_name: sessionmanager-bundle.zip
+    awscli_ssm_checksum: 9930cb528d5a6c44a31c23ec0d82f946
+    installed_application_path: "/usr/local/sessionmanagerplugin/bin/session-manager-plugin"
+    env: sudo
+
+  # https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-macos
+
+  pre_tasks:
+    - name: "Ensuring {{ app_name }} Is Installed"
+      ansible.builtin.stat:
+        path: '{{ installed_application_path }}'
+      register: companyportal_check
+
+    - name: "Fail If {{ app_name }} Is Not Installed and install_application_if_missing Is False"
+      ansible.builtin.fail:
+        msg: "{{ app_name }} is missing, install from http://brew.sh"
+      when:
+        - not companyportal_check.stat.exists
+        - not install_application_if_missing
+
+  tasks:
+    - name: Ensure installer is downloaded
+      ansible.builtin.uri:
+        url: "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/mac/{{ installer_name }}"
+        dest: "{{ download_dir }}/{{ installer_name }}"
+        mode: 0644
+      register: downloaded_file
+      when:
+        - not companyportal_check.stat.exists
+        - install_application_if_missing
+
+
+    - name: Unzip installer
+      ansible.builtin.unarchive:
+        src: "{{ download_dir }}/{{ installer_name }}"
+        dest: "{{ download_dir }}"
+        remote_src: true
+        creates: "{{ download_dir }}/sessionmanager-bundle/install"
+      when:
+        - not companyportal_check.stat.exists
+        - install_application_if_missing
+
+    - name: Ensure sessionmanager is installed
+      ansible.builtin.command:
+        cmd: "sudo ./sessionmanager-bundle/install -i /usr/local/sessionmanagerplugin -b /usr/local/bin/session-manager-plugin"
+        creates: "{{ installed_application_path }}"

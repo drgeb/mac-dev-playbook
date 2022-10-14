@@ -1,18 +1,25 @@
 ---
-- hosts: mac
+- hosts: localhost
   remote_user: vagrant
   collections:
     - drgeb.development
 
-
   vars:
+    configure_globalprotect: true
     configure_certificates_and_trust: true
     certificate_to_import_and_trust_urls:
       - host: access.ninjarmm.net
         port: "443"
     validate_ssl: yes
   tasks:
-    - import_role:
+    - name: Run drgeb.development.globalprotect role.
+      ansible.builtin.import_role:
+        name: drgeb.development.globalprotect
+      tags: [configure_globalprotect]
+      when: configure_globalprotect
+
+    - name: Run drgeb.development.import_and_trust_certificate role.
+      ansible.builtin.import_role:
         name:  drgeb.development.import_and_trust_certificate
       tags: [configure_certificates_and_trust]
       when: configure_certificates_and_trust
