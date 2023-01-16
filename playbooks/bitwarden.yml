@@ -1,0 +1,9 @@
+---
+- hosts: all
+
+  tasks:
+    # mas search Bitwarden
+    - name: "Install BitWarden"
+      community.general.mas:
+        id: 1352778147
+        state: present
