@@ -28,8 +28,9 @@ PLAYBOOK=${1:-main}
 ENVIRONMENT=${ENVIRONMENT:-dev}
 LOG_DIR=${LOG_DIR:-~/logs}
 LOG_FILE=${LOG_FILE:-driver-server.log}
-OPTIONS=${OPTIONS:-}
+# OPTIONS=${OPTIONS:=-kK}
 DATE=$(date '+%Y%m%d%H%M%S')
+PWD=$(security find-generic-password -a ${USER} -s gbennett -w)
 
 if [ ! -z ${LOG_DIR} ]; then
     mkdir -pv ${LOG_DIR}
@@ -37,7 +38,7 @@ fi
 LOG_FILE=${LOG_DIR}/driver-windows.log
 
 if [ ! -z SILENT ]; then
-    ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml ${OPTIONS} | tee ${LOG_FILE}
+    ansible-playbook ${OPTIONS} -i inventory playbooks/${PLAYBOOK}.yml --extra-vars ansible_sudo_pass="${PWD}"  --extra-vars ansible_become_pass="${PWD}" | tee ${LOG_FILE}
 else
-    ansible-playbook  -i inventory playbooks/${PLAYBOOK}.yml ${OPTIONS} -vvvv | tee ${LOG_FILE}
+    ansible-playbook ${OPTIONS} -i inventory playbooks/${PLAYBOOK}.yml -vvvv | tee ${LOG_FILE}
 fi
