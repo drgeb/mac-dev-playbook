@@ -1,169 +1,201 @@
 ---
-- hosts: all
+- name: Aid ASDF management
+  hosts: all
+  vars_files:
+    - "{{ playbook_dir }}/vars/tool-versions.yml"
   roles:
   - role: elliotweiser.osx-command-line-tools
   - role: geerlingguy.mac.homebrew
   - role: osx_provisioner.asdf
     asdf_plugins:
-      - name: "liquibase"
-        versions: ["4.8.0"]
-        global: "4.8.0"
     #   environment:
     #     KERL_CONFIGURE_OPTIONS: "--without-javac --with-ssl=/usr/local/opt/openssl@1.1 --disable-hipe"
     #     CFLAGS: "-O2 -g -fno-stack-check"
     # - name: "python"
     #   versions: "3.9.1"
-
       - name: "java"
-        versions: ["corretto-8.332.08.1"]
-        global: "corretto-8.332.08.1"
+        versions: ["{{ java }}"]
+        global: "{{ java }}"
       - name: "ag"
-        versions: ["2.2.0"]
-        global: "2.2.0"
+        versions: ["{{ ag }}"]
+        global: "{{ ag }}"
+      - name: "argocd"
+        versions: ["{{ argocd }}"]
+        global: "{{ argocd }}"
       - name: "asciidoctorj"
-        versions: ["2.5.3"]
-        global: "2.5.3"
+        versions: ["{{ asciidoctorj }}"]
+        global: "{{ asciidoctorj }}"
       - name: "aws-iam-authenticator"
-        versions: ["0.5.3"]
-        global: "0.5.3"
+        versions: ["{{ aws_iam_authenticator }}"]
+        global: "{{ aws_iam_authenticator }}"
       - name: "awscli"
-        versions: ["2.7.21"]
-        global: "2.7.21"
+        versions: ["{{ awscli }}"]
+        global: "{{ awscli }}"
+      - name: "bats"
+        versions: ["{{ bats }}"]
+        global: "{{ bats }}"
       - name: "bundler"
-        versions: ["2.3.5"]
-        global: "2.3.5"
+        versions: ["{{ bundler }}"]
+        global: "{{ bundler }}"
+      - name: "circleci-cli"
+        versions: ["{{ circleci_cli }}"]
+        global: "{{ circleci_cli }}"
+      - name: "coursier"
+        versions: ["{{ coursier }}"]
+        global: "{{ coursier }}"
       - name: "crossplane-cli"
-        versions: ["1.6.1"]
-        global: "1.6.1"
+        versions: ["{{ crossplane_cli }}"]
+        global: "{{ crossplane_cli }}"
       - name: "direnv"
-        versions: ["2.30.3"]
-        global: "2.30.3"
+        versions: ["{{ direnv }}"]
+        global: "{{ direnv }}"
+      - name: "dive"
+        versions: ["{{ dive }}"]
+        global: "{{ dive }}"
+      - name: "docker-compose-v1"
+        versions: ["{{ docker_compose_v1 }}"]
+        global: "{{ docker_compose_v1 }}"
       - name: "fzf"
-        versions: ["0.29.0"]
-        global:  "0.29.0"
+        versions: ["{{ fzf }}"]
+        global:  "{{ fzf }}"
       - name: "git-chglog"
-        versions: ["0.9.1"]
-        global: "0.9.1"
+        versions: ["{{ git_chglog }}"]
+        global: "{{ git_chglog }}"
       - name: "github-cli"
-        versions: ["2.4.0"]
-        global: "2.4.0"
+        versions: ["{{ github_cli }}"]
+        global: "{{ github_cli }}"
       - name: "github-markdown-toc"
-        versions: ["1.2.0"]
-        global: "1.2.0"
+        versions: ["{{ github_markdown_toc }}"]
+        global: "{{ github_markdown_toc }}"
       - name: "golang"
-        versions: ["1.19rc2"]
-        global: "1.19rc2"
+        versions: ["{{ golang }}"]
+        global: "{{ golang }}"
+      - name: "graalvm"
+        versions: ["{{ graalvm }}"]
+        global: "{{ graalvm }}"
       - name: "jq"
-        versions: ["1.6"]
-        global: "1.6"
+        versions: ["{{ jq }}"]
+        global: "{{ jq }}"
       - name: "gradle"
-        versions: ["7.5.1"]
-        global: "7.5.1"
+        versions: ["{{ gradle }}"]
+        global: "{{ gradle }}"
       - name: "groovy"
-        versions: ["4.0.0-rc-2"]
-        global: "4.0.0-rc-2"
+        versions: ["{{ groovy }}"]
+        global: "{{ groovy }}"
       - name: "helm"
-        versions: ["3.8.0-rc.2"]
-        global: "3.8.0-rc.2"
+        versions: ["{{ helm }}"]
+        global: "{{ helm }}"
       - name: "httpie-go"
-        versions: ["0.7.0"]
-        global: "0.7.0"
+        versions: ["{{ httpie_go }}"]
+        global: "{{ httpie_go }}"
       - name: "kind"
-        versions: ["0.11.1"]
-        global: "0.11.1"
+        versions: ["{{ kind }}"]
+        global: "{{ kind }}"
       - name: "kotlin"
-        versions: ["1.6.10"]
-        global: "1.6.10"
+        versions: ["{{ kotlin }}"]
+        global: "{{ kotlin }}"
       - name: "kubectl"
-        versions: ["1.23.4"]
-        global: "1.23.4"
+        versions: ["{{ kubectl }}"]
+        global: "{{ kubectl }}"
       - name: "kustomize"
-        versions: ["4.4.1"]
-        global: "4.4.1"
+        versions: ["{{ kustomize }}"]
+        global: "{{ kustomize }}"
       - name: "maven"
-        versions: ["3.8.4"]
-        global: "3.8.4"
+        versions: ["{{ maven }}"]
+        global: "{{ maven }}"
       - name: "nodejs"
-        versions: ["18.6.0"]
-        global: "18.6.0"
+        versions: ["{{ nodejs }}"]
+        global: "{{ nodejs }}"
       - name: "packer"
-        versions: ["1.7.9"]
-        global: "1.7.9"
+        versions: ["{{ packer }}"]
+        global: "{{ packer }}"
       - name: "redis"
-        versions: ["6.2.6"]
-        global: "6.2.6"
+        versions: ["{{ redis }}"]
+        global: "{{ redis }}"
       - name: "redis-cli"
-        versions: ["6.2.6"]
-        global: "6.2.6"
+        versions: ["{{ redis_cli }}"]
+        global: "{{ redis_cli }}"
+      - name: "ripgrep"
+        versions: ["{{ ripgrep }}"]
+        global: "{{ ripgrep }}"
+      - name: "rust"
+        versions: ["{{ rust }}"]
+        global: "{{ rust }}"
       - name: "ruby"
-        versions: ["3.1.0"]
-        global: "3.1.0"
+        versions: ["{{ ruby }}"]
+        global: "{{ ruby }}"
+      - name: "saml2aws"
+        versions: ["{{ saml2aws }}"]
+        global: "{{ saml2aws }}"
+      - name: "shfmt"
+        versions: ["{{ shfmt }}"]
+        global: "{{ shfmt }}"
       - name: "spring-boot"
-        versions: ["2.6.3"]
-        global: "2.6.3"
+        versions: ["{{ spring_boot }}"]
+        global: "{{ spring_boot }}"
       - name: "terraform"
-        versions: ["1.1.6"]
-        global: "1.1.6"
+        versions: ["{{ terraform }}"]
+        global: "{{ terraform }}"
       - name: "terraform-ls"
-        versions: ["0.25.2"]
-        global: "0.25.2"
+        versions: ["{{ terraform_ls }}"]
+        global: "{{ terraform_ls }}"
       - name: "terraform-validator"
-        versions: ["3.1.3"]
-        global: "3.1.3"
+        versions: ["{{ terraform_validator }}"]
+        global: "{{ terraform_validator }}"
       - name: "tmux"
-        versions: ["3.2a"]
-        global: "3.2a"
+        versions: ["{{ tmux }}"]
+        global: "{{ tmux }}"
       - name: "vim"
-        versions: ["8.2.4219"]
-        global: "8.2.4219"
+        versions: ["{{ vim }}"]
+        global: "{{ vim }}"
       - name: "waypoint"
-        versions: ["0.7.1"]
-        global: "0.7.1"
+        versions: ["{{ waypoint }}"]
+        global: "{{ waypoint }}"
       - name: "yarn"
-        versions: ["1.22.17"]
-        global: "1.22.17"
+        versions: ["{{ yarn }}"]
+        global: "{{ yarn }}"
       - name: "yj"
-        versions: ["5.0.0"]
-        global: "5.0.0"
+        versions: ["{{ yj }}"]
+        global: "{{ yj }}"
       - name: "yq"
-        versions: ["4.9.8"]
-        global: "4.9.8"
+        versions: ["{{ yq }}"]
+        global: "{{ yq }}"
       - name: "tilt"
-        versions: ["0.25.0"]
-        global: "0.25.0"
+        versions: ["{{ tilt }}"]
+        global: "{{ tilt }}"
       - name: "python"
-        versions: ["3.10.5"]
-        global: "3.10.5"
+        versions: ["{{ python }}"]
+        global: "{{ python }}"
       - name: "asdf-postgres"
-        versions: ["14.2"]
-        global: "14.2"
+        versions: ["{{ asdf_postgres }}"]
+        global: "{{ asdf_postgres }}"
       - name: "liquibase"
-        versions: ["4.8.0"]
-        global: "4.8.0"
+        versions: ["{{ liquibase }}"]
+        global: "{{ liquibase }}"
       - name: "jmeter"
-        versions: ["5.4.3"]
-        global: "5.4.3"
+        versions: ["{{ jmeter }}"]
+        global: "{{ jmeter }}"
       - name: "lua"
-        versions: ["5.4.4"]
-        global: "5.4.4"
+        versions: ["{{ lua }}"]
+        global: "{{ lua }}"
       - name: "pulumi"
-        versions: ["3.33.2"]
-        global:  "3.33.2"
+        versions: ["{{ pulumi }}"]
+        global:  "{{ pulumi }}"
       - name: "poetry"
-        versions: ["1.2.0b3"]
-        global: "1.2.0b3"
+        versions: ["{{ poetry }}"]
+        global: "{{ poetry }}"
       - name: "jbang"
-        versions: ["0.96.4"]
-        global: "0.96.4"
+        versions: ["{{ jbang }}"]
+        global: "{{ jbang }}"
       - name: "shellcheck"
-        versions: ["0.8.0"]
-        global: "0.8.0"
+        versions: ["{{ shellcheck }}"]
+        global: "{{ shellcheck }}"
       - name: "pgbadger"
-        versions: ["11.8"]
-        global: "11.8"
+        versions: ["{{ pgbadger }}"]
+        global: "{{ pgbadger }}"
       - name: "gopass"
-        versions: ["1.14.4"]
-        global: "1.14.4"
+        versions: ["{{ gopass }}"]
+        global: "{{ gopass }}"
       - name: shfmt
-        versions: ["3.3.0"]
-        global: "3.3.0"
+        versions: ["{{ shfmt }}"]
+        global: "{{ shfmt }}"
