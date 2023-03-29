@@ -79,6 +79,7 @@ homebrew_installed_packages:
     - wget
     - wrk
     - zsh-history-substring-search
+    - shellcheck # See: https://blog.thibaut-rousseau.com/2017/12/03/shell-scripts-matter.html
 
 homebrew_taps:
     - homebrew/core
