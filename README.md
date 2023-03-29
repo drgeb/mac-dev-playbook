@@ -185,3 +185,10 @@ This project was created by [Jeff Geerling](https://www.jeffgeerling.com/) (orig
 
 [badge-gh-actions]: https://github.com/geerlingguy/mac-dev-playbook/workflows/CI/badge.svg?event=push
 [link-gh-actions]: https://github.com/geerlingguy/mac-dev-playbook/actions?query=workflow%3ACI
+
+
+## TODO
+  Manage Perl and perl modules
+  perl -MCPAN -e'install Text::CSV'
+
+  use instmodsh

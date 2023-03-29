@@ -20,10 +20,16 @@
         update_homebrew: true
         upgrade_all: true
 
-    - name: Ensure asdf is up dated to the latest version
-      ansible.builtin.command:
-        cmd: asdf upgrade
-      changed_when: false
+    - name: "Ensure brew upgrade --cask for all packages"
+      community.general.homebrew_cask:
+        update_homebrew: true
+        upgrade_all: true
+        greedy: true
+
+    # - name: Ensure asdf is up dated to the latest version
+    #   ansible.builtin.command:
+    #     cmd: asdf upgrade
+    #   changed_when: false
 
     - name: Ensure all plugins are updated to latest commit on default branch
       ansible.builtin.command:
@@ -54,7 +60,7 @@
         exit 0
       changed_when: false
 
-    - name: install the package, force upgrade
+    - name: Install the package, force upgrade
       ansible.builtin.pip:
         name: pip
         executable: pip3
