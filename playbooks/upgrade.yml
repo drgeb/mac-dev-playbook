@@ -168,3 +168,19 @@
 #   - role: drgeb.vagrant
 #     when: configure_vagrant
 #     tags: ['vagrant', 'upgrade']
+    - name: Check Homebrew installation
+      ansible.builtin.command: brew doctor
+      register: brew_doctor_output
+      changed_when: false
+
+    - name: Extract unlinked kegs
+      ansible.builtin.set_fact:
+        unlinked_kegs: "{{ brew_doctor_output.stdout | regex_replace('(\\d+\\.)?\\s*Unlinked kegs in /usr/local/Cellar: (.*)', '\\2') | trim | split('\n') }}"
+      when: "'Unlinked kegs in' in brew_doctor_output.stdout"
+
+    - name: Link unlinked kegs
+      ansible.builtin.lineinfile:
+        path: "{{ item.path }}/INSTALL_RECEIPT.json"
+        line: "  \"installed_as_dependency\": true,"
+      with_items: "{{ unlinked_kegs }}"
+      when: item is defined

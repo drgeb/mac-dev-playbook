@@ -1,0 +1,7 @@
+---
+- name: Ansible playbook to retrieve environment variables on windows servers.
+  hosts: localhost
+  tasks:
+  - name: Basic usage
+    ansible.builtin.debug:
+      msg: "{{ lookup('ansible.builtin.env', 'NINJAONE_ENV', default=Undefined) }} is the NINJAONE_ENV environment variable."

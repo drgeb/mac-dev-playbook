@@ -1,0 +1,22 @@
+---
+- name: Ensure asdf-outdated plugin is installed
+  hosts: all
+  vars_files:
+    - "{{ playbook_dir }}/vars/tool-versions.yml"
+  tasks:
+  # Install formula foo with 'brew' in default path
+  - name: Ensure crystal is installed via homebrew
+    community.general.homebrew:
+      name: crystal
+      state: present
+
+  # pull repo: git@github.com:mjochimsen/asdf-outdated.git
+  - name: Ensure git asdf-outdated.git checkout
+    ansible.builtin.git:
+      repo: 'git@github.com:mjochimsen/asdf-outdated.git'
+      dest: '~/workspace/git/github.com/mjochimsen/asdf-outdated'
+
+  - name: Ensure outdated plugin is installed
+    ansible.builtin.command:
+      chdir: '~/workspace/git/github.com/mjochimsen/asdf-outdated'
+      cmd: "crystal build src/outdated.cr"
