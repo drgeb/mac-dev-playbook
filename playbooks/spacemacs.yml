@@ -15,7 +15,7 @@
       tags: [always]
 
   tasks:
-    - import_role:
+    - ansible.builtin.import_role:
         name: drgeb.development.spacemacs
       tags: [spacemacs]
       when: configure_spacemacs
