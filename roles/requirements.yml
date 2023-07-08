@@ -9,7 +9,6 @@ roles:
     - name: gantsign.antigen
     - name: gantsign.antigen_bundles
     - name: viasite-ansible.zsh
-    - name: drew-kun.nerdfonts
     - name: tkimball83.iterm2
     - name: ccdc.teamcity_agent
     - name: lwalley.ansible-role-iterm2
@@ -20,3 +19,4 @@ collections:
     - name: geerlingguy.mac
     - name: kb9zzw.garage
     - name: community.crypto
+    - name: drew1kun.fancyfonts
